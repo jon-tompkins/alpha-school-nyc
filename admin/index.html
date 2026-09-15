@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Alpha School NYC</title>
+<meta name="theme-color" content="#0a2540">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a2540'/%3E%3Ctext x='50' y='72' font-size='64' font-family='Georgia,serif' fill='white' text-anchor='middle'%3E%CE%B1%3C/text%3E%3C/svg%3E">
+<style>
+  :root{--navy:#0a2540;--ink:#12212e;--body:#41566a;--muted:#7f93a6;--line:#e6ecf3;--bg:#f6f9fc;--card:#fff;--accent:#1e6bff;--rd:#e0455f;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--sans);background:linear-gradient(160deg,#0a2540,#0e3157 55%,#123a63);color:var(--body);min-height:100vh;-webkit-font-smoothing:antialiased;display:grid;place-items:center;padding:24px}
+  /* gate */
+  .gate{width:100%;max-width:380px;background:var(--card);border-radius:18px;padding:30px 26px;box-shadow:0 20px 50px rgba(0,0,0,.28);text-align:center}
+  .gate img{height:34px;margin:0 auto 4px;display:block}
+  .logo-wrap{background:var(--navy);border-radius:12px;padding:14px 0 12px;margin-bottom:20px}
+  .gate h1{font-size:19px;color:var(--ink);font-weight:700;letter-spacing:-.01em}
+  .gate p{font-size:13.5px;color:var(--muted);margin:6px 0 20px}
+  .gate input{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px 14px;font:500 15px var(--sans);color:var(--ink);outline:none;transition:.15s;text-align:center;letter-spacing:.04em}
+  .gate input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #1e6bff22}
+  .gate button{width:100%;margin-top:12px;border:0;border-radius:11px;background:var(--accent);color:#fff;font:650 15px var(--sans);padding:13px;cursor:pointer;transition:.15s}
+  .gate button:hover{background:#1559e0}
+  .err{color:var(--rd);font-size:13px;margin-top:12px;min-height:17px;font-weight:600}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:16px;line-height:1.5}
+  /* panel */
+  #panel{display:none;width:100%;max-width:720px}
+  .pcard{background:var(--card);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.24);overflow:hidden}
+  .phead{background:var(--navy);color:#fff;padding:20px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .phead img{height:26px}
+  .phead .t{font-size:16px;font-weight:680}
+  .phead .badge{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:#ffffff1f;border:1px solid #ffffff33;padding:5px 11px;border-radius:999px}
+  .pbody{padding:24px}
+  .pbody h2{font-size:15px;color:var(--ink);margin-bottom:8px}
+  .pbody p{font-size:14px;line-height:1.6;margin-bottom:14px}
+  .pbody code{background:var(--bg);border:1px solid var(--line);padding:2px 6px;border-radius:5px;font-size:12.5px;color:var(--accent)}
+  .signout{background:none;border:1px solid var(--line);color:var(--body);font:600 13px var(--sans);padding:9px 15px;border-radius:9px;cursor:pointer}
+  .signout:hover{border-color:var(--rd);color:var(--rd)}
+  .note{font-size:12px;color:var(--muted);margin-top:18px;padding-top:16px;border-top:1px solid var(--line);line-height:1.6}
+</style>
+</head>
+<body>
+  <form class="gate" id="gate" autocomplete="off">
+    <div class="logo-wrap"><img src="../assets/alpha-white.svg" alt="Alpha School"></div>
+    <h1>Admin Access</h1>
+    <p>Alpha School NYC · Parent Hub</p>
+    <input id="pw" type="password" placeholder="Password" autofocus aria-label="Password">
+    <button type="submit">Unlock</button>
+    <div class="err" id="err"></div>
+    <div class="hint">Private area. If you need access, ask an admin.</div>
+  </form>
+
+  <div id="panel">
+    <div class="pcard">
+      <div class="phead">
+        <img src="../assets/alpha-white.svg" alt="Alpha School">
+        <span class="t">Parent Hub · Admin</span>
+        <span class="badge">Signed in</span>
+      </div>
+      <div class="pbody">
+        <h2>You're in 👋</h2>
+        <p>This is the private admin area for the Alpha School NYC parent hub. It's a starting point — tell Benji what you'd like here and it'll get built out. Ideas: a spot to post parent announcements, draft/manage the hub links, or track RSVPs.</p>
+        <p>For now, the hub's links are edited in the site source. Want in-page editing, an announcements banner, or something else? Just say the word.</p>
+        <button class="signout" id="signout">Sign out</button>
+        <div class="note">Heads up: this page is gated in the browser (client-side) since the site is static hosting — it keeps casual visitors out, but it isn't strong security. Don't store anything truly sensitive here until we add real server-side auth.</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const PW_HASH = "37bd45d638c2d11c49c641d2e9c4f49f406caf3ee282743e0c800aa1ed68e2ee"; // sha-256
+  const KEY = "alphanyc_admin_ok";
+  const gate = document.getElementById('gate'), panel = document.getElementById('panel'), err = document.getElementById('err');
+  function show(ok){ gate.style.display = ok ? 'none' : 'block'; panel.style.display = ok ? 'block' : 'none'; }
+  async function sha256(s){
+    if (window.crypto && crypto.subtle){
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    return null; // insecure context (http): can't hash
+  }
+  if (sessionStorage.getItem(KEY) === '1') show(true);
+  gate.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const h = await sha256(document.getElementById('pw').value);
+    if (h === null){ err.textContent = 'Please open this page over https://'; return; }
+    if (h === PW_HASH){ sessionStorage.setItem(KEY,'1'); err.textContent=''; show(true); }
+    else { err.textContent = 'Incorrect password'; document.getElementById('pw').select(); }
+  });
+  document.getElementById('signout').addEventListener('click', ()=>{ sessionStorage.removeItem(KEY); show(false); document.getElementById('pw').value=''; });
+</script>
+</body>
+</html>
