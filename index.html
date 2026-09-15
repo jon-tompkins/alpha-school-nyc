@@ -48,6 +48,13 @@
   .go{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:650;color:var(--accent);margin-top:2px}
   .go svg{transition:transform .16s ease}
   .card:hover .go svg{transform:translate(3px,-3px)}
+  /* multi-link card */
+  .card.multi .links{display:flex;flex-direction:column;gap:0;margin-top:2px}
+  .card.multi .links a{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:650;color:var(--accent);padding:9px 0;border-top:1px solid var(--line)}
+  .card.multi .links a svg{margin-left:auto;transition:transform .16s ease}
+  .card.multi .links a:hover svg{transform:translate(3px,-3px)}
+  .card .codechip{display:inline-block;margin-top:4px;font-size:12px;background:#fff5e8;border:1px solid #f4d9b0;color:#a86412;padding:6px 9px;border-radius:8px;line-height:1.5}
+  .card .codechip b{color:#7a4708;letter-spacing:.02em}
   /* per-card icon tints */
   .t-cal{background:#eaf1ff;color:#1e6bff}.t-time{background:#e9f8ef;color:#12a150}
   .t-wa{background:#e7f9ef;color:#1fae5a}.t-guide{background:#f3ecff;color:#7b4dff}
@@ -128,16 +135,20 @@
       <a class="card" href="https://alpha.experiences.school/" target="_blank" rel="noopener noreferrer">
         <div class="ic t-after">🎨</div>
         <h2>After-School Programs</h2>
-        <p>Enrichment, clubs, and activities to explore beyond the classroom.</p>
+        <p>Enrichment, clubs, and activities beyond the classroom.</p>
+        <span class="codechip">Campus code <b>AlphaNewYork2026</b> — please <b>type it in</b>, don't copy-paste.</span>
         <span class="go">Browse programs <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
       </a>
 
-      <a class="card" href="https://docs.google.com/document/d/1vkr9r0s0dmnRCkLskWLtp7yQKVn8cpmsG5hL84IJPEU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">
+      <div class="card multi">
         <div class="ic t-fam">📗</div>
-        <h2>Family Guide</h2>
-        <p>Your complete guide to life as an Alpha family — policies, tips, and essentials.</p>
-        <span class="go">Read the guide <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
-      </a>
+        <h2>More Information</h2>
+        <p>The full Family Guide, plus a directory of who to contact at Alpha NYC.</p>
+        <div class="links">
+          <a href="https://docs.google.com/document/d/1vkr9r0s0dmnRCkLskWLtp7yQKVn8cpmsG5hL84IJPEU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Family Guide <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+          <a href="contacts/">Who to Contact <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
 
     </div>
   </main>
@@ -155,11 +166,11 @@
   var day=new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'}); // YYYY-MM-DD (NYC)
   function bump(k){ try{ fetch(API+k,{mode:'cors',keepalive:true}).catch(function(){});}catch(e){} }
   bump('views-all'); bump('views-'+day);
-  var MAP=[['calendars/','calendar'],['2026-2027-Calendar','calendar'],['greentop.farm','lunch'],
+  var MAP=[['contacts/','contacts'],['calendars/','calendar'],['2026-2027-Calendar','calendar'],['greentop.farm','lunch'],
     ['timeback','timeback'],['alpha-campus-nine','workshops'],['whatsapp','whatsapp'],['canva','guides'],
     ['community.alpha.school','community'],['experiences.school','afterschool'],['docs.google.com','familyguide']];
   function slug(h){ for(var i=0;i<MAP.length;i++){ if(h.indexOf(MAP[i][0])>-1) return MAP[i][1]; } return null; }
-  document.querySelectorAll('a.card').forEach(function(a){
+  document.querySelectorAll('a.card, .card a').forEach(function(a){
     a.addEventListener('click',function(){ var s=slug(a.getAttribute('href')||''); if(s){ bump('click-'+s+'-all'); bump('click-'+s+'-'+day); } });
   });
 })();
