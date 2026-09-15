@@ -104,6 +104,7 @@
         <p>Your child's learning platform — track their progress and daily work.</p>
         <div class="links">
           <a href="https://alpha.timeback.com/" target="_blank" rel="noopener noreferrer">Open Timeback <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+          <a href="https://docs.google.com/document/d/1GHwpbE9VNWaY0K5E8NIQylMsJQOmp3V0VmG6NmXUYQ4/edit" target="_blank" rel="noopener noreferrer">Parent Guide (how to read it) <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
           <a href="https://www.loom.com/share/e6c8ecfa130543d0b9212ad3731ebd24" target="_blank" rel="noopener noreferrer">3-min walkthrough (video) <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
         </div>
       </div>
@@ -115,12 +116,15 @@
         <span class="go">Open portal <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
       </a>
 
-      <a class="card" href="https://alpha-campus-nine.vercel.app/nyc/workshops" target="_blank" rel="noopener noreferrer">
+      <div class="card multi">
         <div class="ic t-work">🗓️</div>
         <h2>Workshops</h2>
-        <p>The workshops hub — schedules and the check-chart, all in one place.</p>
-        <span class="go">Open workshops <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
-      </a>
+        <p>Workshop schedules, plus the "I can" skill check-charts by grade.</p>
+        <div class="links">
+          <a href="https://alpha-campus-nine.vercel.app/nyc/workshops" target="_blank" rel="noopener noreferrer">Workshops hub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+          <a href="https://docs.google.com/spreadsheets/d/13S6sL1mOkDflfoj43kCcJiZ47iBBKonxHcfSkYJg1A4/edit" target="_blank" rel="noopener noreferrer">Check Charts by Grade <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+        </div>
+      </div>
 
       <a class="card" href="https://chat.whatsapp.com/CGaclAvdIts4Y4ELGJW9E3" target="_blank" rel="noopener noreferrer">
         <div class="ic t-wa">💬</div>
@@ -147,16 +151,17 @@
         <div class="ic t-after">🎨</div>
         <h2>After-School Programs</h2>
         <p>Enrichment, clubs, and activities beyond the classroom.</p>
-        <span class="codechip">Campus code <b>AlphaNewYork2026</b> — please <b>type it in</b>, don't copy-paste.</span>
+        <span class="codechip">Campus code <b>AlphaNewYork2026</b>. If it doesn't go through, try re-typing it — a stray space is the usual culprit.</span>
         <span class="go">Browse programs <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
       </a>
 
       <div class="card multi">
         <div class="ic t-fam">📗</div>
         <h2>More Information</h2>
-        <p>The full Family Guide, plus a directory of who to contact at Alpha NYC.</p>
+        <p>The Family Guide, new-family resources, and who to contact at Alpha NYC.</p>
         <div class="links">
           <a href="https://docs.google.com/document/d/1vkr9r0s0dmnRCkLskWLtp7yQKVn8cpmsG5hL84IJPEU/edit?tab=t.0" target="_blank" rel="noopener noreferrer">Family Guide <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+          <a href="https://drive.google.com/drive/folders/13FGQVhbvORGNvXur1rocd7eznyX-TGmZ" target="_blank" rel="noopener noreferrer">New Family Resources <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
           <a href="contacts/">Who to Contact <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </div>
@@ -178,8 +183,10 @@
   function bump(k){ try{ fetch(API+k,{mode:'cors',keepalive:true}).catch(function(){});}catch(e){} }
   bump('views-all'); bump('views-'+day);
   var MAP=[['contacts/','contacts'],['calendars/','calendar'],['2026-2027-Calendar','calendar'],['greentop.farm','lunch'],
-    ['loom.com','timeback'],['timeback','timeback'],['alpha-campus-nine','workshops'],['fsenrollment','parentportal'],
-    ['whatsapp','whatsapp'],['canva','guides'],['community.alpha.school','community'],['experiences.school','afterschool'],['docs.google.com','familyguide']];
+    ['loom.com','timeback'],['1GHwpbE9','timeback'],['timeback','timeback'],
+    ['13S6sL1m','workshops'],['alpha-campus-nine','workshops'],['fsenrollment','parentportal'],
+    ['whatsapp','whatsapp'],['canva','guides'],['community.alpha.school','community'],['experiences.school','afterschool'],
+    ['1vkr9r0s','familyguide'],['drive.google.com','familyguide'],['docs.google.com','familyguide']];
   function slug(h){ for(var i=0;i<MAP.length;i++){ if(h.indexOf(MAP[i][0])>-1) return MAP[i][1]; } return null; }
   document.querySelectorAll('a.card, .card a').forEach(function(a){
     a.addEventListener('click',function(){ var s=slug(a.getAttribute('href')||''); if(s){ bump('click-'+s+'-all'); bump('click-'+s+'-'+day); } });
