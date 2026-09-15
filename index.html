@@ -60,6 +60,7 @@
   .t-wa{background:#e7f9ef;color:#1fae5a}.t-guide{background:#f3ecff;color:#7b4dff}
   .t-comm{background:#fff2e6;color:#f2820a}.t-after{background:#ffeef0;color:#f0455f}
   .t-fam{background:#e6f6fb;color:#0a97c4}.t-lunch{background:#eef7e6;color:#4e9f2f}.t-work{background:#eef0ff;color:#5b63e6}
+  .t-portal{background:#e6f6f2;color:#0f9488}
 
   footer{padding:30px 0 46px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7}
   footer .rule{height:1px;background:var(--line);margin:0 0 22px}
@@ -97,11 +98,21 @@
         <span class="go">See the menu <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
       </a>
 
-      <a class="card" href="https://alpha.timeback.com/" target="_blank" rel="noopener noreferrer">
+      <div class="card multi">
         <div class="ic t-time">⏱️</div>
         <h2>Timeback</h2>
-        <p>Your child's learning platform — log in to follow their progress and daily work.</p>
-        <span class="go">Go to Timeback <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
+        <p>Your child's learning platform — track their progress and daily work.</p>
+        <div class="links">
+          <a href="https://alpha.timeback.com/" target="_blank" rel="noopener noreferrer">Open Timeback <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+          <a href="https://www.loom.com/share/e6c8ecfa130543d0b9212ad3731ebd24" target="_blank" rel="noopener noreferrer">3-min walkthrough (video) <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+        </div>
+      </div>
+
+      <a class="card" href="https://alpha-anywhere-center.fsenrollment.com/portal" target="_blank" rel="noopener noreferrer">
+        <div class="ic t-portal">🗂️</div>
+        <h2>Parent Portal</h2>
+        <p>Forms, invoices, and tuition. Note: no autopay — each invoice is paid manually.</p>
+        <span class="go">Open portal <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
       </a>
 
       <a class="card" href="https://alpha-campus-nine.vercel.app/nyc/workshops" target="_blank" rel="noopener noreferrer">
@@ -167,8 +178,8 @@
   function bump(k){ try{ fetch(API+k,{mode:'cors',keepalive:true}).catch(function(){});}catch(e){} }
   bump('views-all'); bump('views-'+day);
   var MAP=[['contacts/','contacts'],['calendars/','calendar'],['2026-2027-Calendar','calendar'],['greentop.farm','lunch'],
-    ['timeback','timeback'],['alpha-campus-nine','workshops'],['whatsapp','whatsapp'],['canva','guides'],
-    ['community.alpha.school','community'],['experiences.school','afterschool'],['docs.google.com','familyguide']];
+    ['loom.com','timeback'],['timeback','timeback'],['alpha-campus-nine','workshops'],['fsenrollment','parentportal'],
+    ['whatsapp','whatsapp'],['canva','guides'],['community.alpha.school','community'],['experiences.school','afterschool'],['docs.google.com','familyguide']];
   function slug(h){ for(var i=0;i<MAP.length;i++){ if(h.indexOf(MAP[i][0])>-1) return MAP[i][1]; } return null; }
   document.querySelectorAll('a.card, .card a').forEach(function(a){
     a.addEventListener('click',function(){ var s=slug(a.getAttribute('href')||''); if(s){ bump('click-'+s+'-all'); bump('click-'+s+'-'+day); } });
