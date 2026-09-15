@@ -8,87 +8,170 @@
 <meta name="theme-color" content="#0a2540">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a2540'/%3E%3Ctext x='50' y='72' font-size='64' font-family='Georgia,serif' fill='white' text-anchor='middle'%3E%CE%B1%3C/text%3E%3C/svg%3E">
 <style>
-  :root{--navy:#0a2540;--ink:#12212e;--body:#41566a;--muted:#7f93a6;--line:#e6ecf3;--bg:#f6f9fc;--card:#fff;--accent:#1e6bff;--rd:#e0455f;
+  :root{--navy:#0a2540;--ink:#12212e;--body:#41566a;--muted:#7f93a6;--line:#e6ecf3;--bg:#f6f9fc;--card:#fff;--accent:#1e6bff;--gr:#37a86b;--rd:#e0455f;
     --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:var(--sans);background:linear-gradient(160deg,#0a2540,#0e3157 55%,#123a63);color:var(--body);min-height:100vh;-webkit-font-smoothing:antialiased;display:grid;place-items:center;padding:24px}
+  body{font-family:var(--sans);color:var(--body);-webkit-font-smoothing:antialiased;min-height:100vh}
+  body.locked{background:linear-gradient(160deg,#0a2540,#0e3157 55%,#123a63);display:grid;place-items:center;padding:24px}
+  body.open{background:var(--bg);display:block}
   /* gate */
-  .gate{width:100%;max-width:380px;background:var(--card);border-radius:18px;padding:30px 26px;box-shadow:0 20px 50px rgba(0,0,0,.28);text-align:center}
-  .gate img{height:34px;margin:0 auto 4px;display:block}
+  .gate{width:100%;max-width:380px;background:var(--card);border-radius:18px;padding:30px 26px;box-shadow:0 20px 50px rgba(0,0,0,.28);text-align:center;margin:0 auto}
   .logo-wrap{background:var(--navy);border-radius:12px;padding:14px 0 12px;margin-bottom:20px}
-  .gate h1{font-size:19px;color:var(--ink);font-weight:700;letter-spacing:-.01em}
+  .logo-wrap img{height:34px;display:block;margin:0 auto}
+  .gate h1{font-size:19px;color:var(--ink);font-weight:700}
   .gate p{font-size:13.5px;color:var(--muted);margin:6px 0 20px}
-  .gate input{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px 14px;font:500 15px var(--sans);color:var(--ink);outline:none;transition:.15s;text-align:center;letter-spacing:.04em}
+  .gate input{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px 14px;font:500 15px var(--sans);color:var(--ink);outline:none;text-align:center;letter-spacing:.04em}
   .gate input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #1e6bff22}
-  .gate button{width:100%;margin-top:12px;border:0;border-radius:11px;background:var(--accent);color:#fff;font:650 15px var(--sans);padding:13px;cursor:pointer;transition:.15s}
-  .gate button:hover{background:#1559e0}
+  .gate button.unlock{width:100%;margin-top:12px;border:0;border-radius:11px;background:var(--accent);color:#fff;font:650 15px var(--sans);padding:13px;cursor:pointer}
+  .gate button.unlock:hover{background:#1559e0}
   .err{color:var(--rd);font-size:13px;margin-top:12px;min-height:17px;font-weight:600}
-  .hint{font-size:11.5px;color:var(--muted);margin-top:16px;line-height:1.5}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:16px}
   /* panel */
-  #panel{display:none;width:100%;max-width:720px}
-  .pcard{background:var(--card);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.24);overflow:hidden}
-  .phead{background:var(--navy);color:#fff;padding:20px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-  .phead img{height:26px}
-  .phead .t{font-size:16px;font-weight:680}
-  .phead .badge{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:#ffffff1f;border:1px solid #ffffff33;padding:5px 11px;border-radius:999px}
-  .pbody{padding:24px}
-  .pbody h2{font-size:15px;color:var(--ink);margin-bottom:8px}
-  .pbody p{font-size:14px;line-height:1.6;margin-bottom:14px}
-  .pbody code{background:var(--bg);border:1px solid var(--line);padding:2px 6px;border-radius:5px;font-size:12.5px;color:var(--accent)}
-  .signout{background:none;border:1px solid var(--line);color:var(--body);font:600 13px var(--sans);padding:9px 15px;border-radius:9px;cursor:pointer}
+  #panel{display:none}
+  .topbar{background:var(--navy);color:#fff;padding:16px 22px;display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+  .topbar img{height:24px}
+  .topbar .t{font-size:15px;font-weight:680}
+  .topbar .sp{flex:1}
+  .topbar .updated{font-size:11.5px;color:#a9c0dd}
+  .btn{border:1px solid #ffffff33;background:#ffffff14;color:#fff;font:600 12.5px var(--sans);padding:8px 13px;border-radius:9px;cursor:pointer}
+  .btn:hover{background:#ffffff22}
+  .wrap{max-width:900px;margin:0 auto;padding:22px 18px 60px}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 17px}
+  .tile .lab{font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .tile .val{font-size:28px;font-weight:720;color:var(--ink);margin-top:5px;font-variant-numeric:tabular-nums}
+  .tile .val small{font-size:14px;color:var(--body);font-weight:600}
+  .sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+  .sec h3{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px}
+  /* leaderboard rows */
+  .lrow{display:flex;align-items:center;gap:11px;padding:7px 0}
+  .lrow .ic{width:30px;text-align:center;font-size:17px;flex-shrink:0}
+  .lrow .nm{font-size:13.5px;color:var(--ink);font-weight:600;width:130px;flex-shrink:0}
+  .lrow .bar{flex:1;height:9px;background:#eef2f7;border-radius:6px;overflow:hidden}
+  .lrow .bar i{display:block;height:100%;background:linear-gradient(90deg,#1e6bff,#4d8bff);border-radius:6px}
+  .lrow .n{font-size:13px;font-weight:700;color:var(--ink);width:44px;text-align:right;font-variant-numeric:tabular-nums}
+  .muted-empty{color:var(--muted);font-size:13px;padding:6px 0}
+  /* 14-day chart */
+  .chart{display:flex;align-items:flex-end;gap:5px;height:120px;padding-top:6px}
+  .chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+  .chart .col .b{width:100%;max-width:26px;background:linear-gradient(180deg,#4d8bff,#1e6bff);border-radius:5px 5px 0 0;min-height:2px;transition:height .3s}
+  .chart .col .d{font-size:9.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .chart .col .v{font-size:10px;color:var(--body);font-weight:700}
+  .signout{border:1px solid var(--line);background:var(--card);color:var(--body);font:600 12.5px var(--sans);padding:8px 13px;border-radius:9px;cursor:pointer}
   .signout:hover{border-color:var(--rd);color:var(--rd)}
-  .note{font-size:12px;color:var(--muted);margin-top:18px;padding-top:16px;border-top:1px solid var(--line);line-height:1.6}
+  .note{font-size:11.5px;color:var(--muted);line-height:1.6;text-align:center;margin-top:8px}
+  .loading{color:var(--muted);font-size:13px;padding:10px 0}
 </style>
 </head>
-<body>
+<body class="locked">
   <form class="gate" id="gate" autocomplete="off">
     <div class="logo-wrap"><img src="../assets/alpha-white.svg" alt="Alpha School"></div>
     <h1>Admin Access</h1>
     <p>Alpha School NYC · Parent Hub</p>
     <input id="pw" type="password" placeholder="Password" autofocus aria-label="Password">
-    <button type="submit">Unlock</button>
+    <button type="submit" class="unlock">Unlock</button>
     <div class="err" id="err"></div>
     <div class="hint">Private area. If you need access, ask an admin.</div>
   </form>
 
   <div id="panel">
-    <div class="pcard">
-      <div class="phead">
-        <img src="../assets/alpha-white.svg" alt="Alpha School">
-        <span class="t">Parent Hub · Admin</span>
-        <span class="badge">Signed in</span>
-      </div>
-      <div class="pbody">
-        <h2>You're in 👋</h2>
-        <p>This is the private admin area for the Alpha School NYC parent hub. It's a starting point — tell Benji what you'd like here and it'll get built out. Ideas: a spot to post parent announcements, draft/manage the hub links, or track RSVPs.</p>
-        <p>For now, the hub's links are edited in the site source. Want in-page editing, an announcements banner, or something else? Just say the word.</p>
-        <button class="signout" id="signout">Sign out</button>
-        <div class="note">Heads up: this page is gated in the browser (client-side) since the site is static hosting — it keeps casual visitors out, but it isn't strong security. Don't store anything truly sensitive here until we add real server-side auth.</div>
-      </div>
+    <div class="topbar">
+      <img src="../assets/alpha-white.svg" alt="Alpha School">
+      <span class="t">Parent Hub · Analytics</span>
+      <span class="sp"></span>
+      <span class="updated" id="updated"></span>
+      <button class="btn" id="refresh">Refresh</button>
+      <button class="btn" id="signout">Sign out</button>
+    </div>
+    <div class="wrap">
+      <div class="tiles" id="tiles"></div>
+      <div class="sec"><h3>Clicks by item · all time</h3><div id="leader"><div class="loading">loading…</div></div></div>
+      <div class="sec"><h3>Clicks by item · today</h3><div id="today"><div class="loading">loading…</div></div></div>
+      <div class="sec"><h3>Site visits · last 7 days</h3><div id="traffic"><div class="loading">loading…</div></div></div>
+      <div class="note">Counts are collected with a lightweight cookie-free counter (no personal data). This admin page is gated in the browser only — a soft gate, not strong security.</div>
     </div>
   </div>
 
 <script>
-  const PW_HASH = "37bd45d638c2d11c49c641d2e9c4f49f406caf3ee282743e0c800aa1ed68e2ee"; // sha-256
-  const KEY = "alphanyc_admin_ok";
-  const gate = document.getElementById('gate'), panel = document.getElementById('panel'), err = document.getElementById('err');
-  function show(ok){ gate.style.display = ok ? 'none' : 'block'; panel.style.display = ok ? 'block' : 'none'; }
-  async function sha256(s){
-    if (window.crypto && crypto.subtle){
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
-      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
-    }
-    return null; // insecure context (http): can't hash
+  const PW_HASH="37bd45d638c2d11c49c641d2e9c4f49f406caf3ee282743e0c800aa1ed68e2ee";
+  const KEY="alphanyc_admin_ok";
+  const NS="alphanyc-897d3d7b0214";
+  const GET="https://abacus.jasoncameron.dev/get/"+NS+"/";
+  const ITEMS=[
+    {s:'calendar',l:'School Calendar',e:'📅'},{s:'lunch',l:'Lunch',e:'🍎'},
+    {s:'timeback',l:'Timeback',e:'⏱️'},{s:'workshops',l:'Workshops',e:'🗓️'},
+    {s:'whatsapp',l:'Parents WhatsApp',e:'💬'},{s:'guides',l:'Meet the Guides',e:'🧑‍🏫'},
+    {s:'community',l:'Community Portal',e:'🌐'},{s:'afterschool',l:'After-School',e:'🎨'},
+    {s:'familyguide',l:'Family Guide',e:'📗'}];
+  const $=id=>document.getElementById(id);
+  const body=document.body;
+  function show(ok){ body.className = ok?'open':'locked'; $('panel').style.display=ok?'block':'none'; $('gate').style.display=ok?'none':'block'; if(ok) load(); }
+  async function sha256(s){ if(window.crypto&&crypto.subtle){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); } return null; }
+  // gate
+  if(sessionStorage.getItem(KEY)==='1') show(true);
+  $('gate').addEventListener('submit',async e=>{ e.preventDefault();
+    const h=await sha256($('pw').value);
+    if(h===null){ $('err').textContent='Please open this page over https://'; return; }
+    if(h===PW_HASH){ sessionStorage.setItem(KEY,'1'); $('err').textContent=''; show(true); }
+    else { $('err').textContent='Incorrect password'; $('pw').select(); } });
+  $('signout').addEventListener('click',()=>{ sessionStorage.removeItem(KEY); $('pw').value=''; show(false); });
+  $('refresh').addEventListener('click',load);
+
+  const nyDay=off=>{ const d=new Date(); d.setUTCDate(d.getUTCDate()-off); return d.toLocaleDateString('en-CA',{timeZone:'America/New_York'}); };
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  async function val(key,retry){ retry=retry||0;   // abacus limit = 30 req / 10s per IP → retry on 429
+    try{ const r=await fetch(GET+key,{mode:'cors'});
+      if(r.status===429){ if(retry<3){ await sleep(1500); return val(key,retry+1);} return 0; }
+      if(!r.ok) return 0;
+      const j=await r.json();
+      if(j&&typeof j.value==='number') return j.value;
+      if(j&&j.error){ if(retry<3){ await sleep(1500); return val(key,retry+1);} return 0; }
+      return 0;
+    }catch(e){ if(retry<3){ await sleep(1200); return val(key,retry+1);} return -1; } }
+
+  async function load(){
+    $('updated').textContent='refreshing…';
+    const today=nyDay(0);
+    const days=[]; for(let i=6;i>=0;i--) days.push(nyDay(i));
+    // fire all reads in parallel
+    const pViews = val('views-all');
+    const pItemsAll = Promise.all(ITEMS.map(it=>val('click-'+it.s+'-all')));
+    const pItemsToday = Promise.all(ITEMS.map(it=>val('click-'+it.s+'-'+today)));
+    const pDaily = Promise.all(days.map(d=>val('views-'+d)));
+    const [views,itemsAll,itemsToday,daily] = await Promise.all([pViews,pItemsAll,pItemsToday,pDaily]);
+
+    if(views===-1){ $('leader').innerHTML='<div class="muted-empty">Couldn\'t reach the analytics service — try Refresh in a moment.</div>'; $('updated').textContent=''; return; }
+    const clean=a=>a.map(x=>x<0?0:x);
+    const iAll=clean(itemsAll), iToday=clean(itemsToday), dly=clean(daily);
+    const totalClicks=iAll.reduce((s,x)=>s+x,0);
+    const totalToday=dly[dly.length-1]||0;
+    // busiest item
+    let bi=0; iAll.forEach((v,i)=>{ if(v>iAll[bi]) bi=i; });
+    // tiles
+    $('tiles').innerHTML=
+      tile('Total visits',views)+tile('Visits today',totalToday)+tile('Total link clicks',totalClicks)+
+      tile('Top link', totalClicks? (ITEMS[bi].e+' '+ITEMS[bi].l):'—', true);
+    // leaderboard (all time)
+    renderBars('leader',ITEMS.map((it,i)=>({it,n:iAll[i]})));
+    renderBars('today',ITEMS.map((it,i)=>({it,n:iToday[i]})));
+    // 14-day traffic
+    const max=Math.max.apply(null,dly.concat([1]));
+    $('traffic').innerHTML='<div class="chart">'+days.map((d,i)=>{
+      const h=Math.round((dly[i]/max)*100);
+      const lbl=d.slice(5).replace('-','/');
+      return '<div class="col"><div class="v">'+(dly[i]||'')+'</div><div class="b" style="height:'+h+'%"></div><div class="d">'+lbl+'</div></div>';
+    }).join('')+'</div>';
+    $('updated').textContent='updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   }
-  if (sessionStorage.getItem(KEY) === '1') show(true);
-  gate.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const h = await sha256(document.getElementById('pw').value);
-    if (h === null){ err.textContent = 'Please open this page over https://'; return; }
-    if (h === PW_HASH){ sessionStorage.setItem(KEY,'1'); err.textContent=''; show(true); }
-    else { err.textContent = 'Incorrect password'; document.getElementById('pw').select(); }
-  });
-  document.getElementById('signout').addEventListener('click', ()=>{ sessionStorage.removeItem(KEY); show(false); document.getElementById('pw').value=''; });
+  function tile(lab,v,small){ return '<div class="tile"><div class="lab">'+lab+'</div><div class="val">'+(small?'<span style="font-size:16px">'+v+'</span>':fmt(v))+'</div></div>'; }
+  function fmt(n){ return (typeof n==='number')? n.toLocaleString('en-US') : n; }
+  function renderBars(id,rows){
+    rows.sort((a,b)=>b.n-a.n);
+    const max=Math.max.apply(null,rows.map(r=>r.n).concat([1]));
+    if(rows.every(r=>r.n===0)){ $(id).innerHTML='<div class="muted-empty">No clicks yet — check back after some traffic.</div>'; return; }
+    $(id).innerHTML=rows.map(r=>'<div class="lrow"><span class="ic">'+r.it.e+'</span><span class="nm">'+r.it.l+'</span>'+
+      '<span class="bar"><i style="width:'+Math.round((r.n/max)*100)+'%"></i></span><span class="n">'+r.n+'</span></div>').join('');
+  }
 </script>
 </body>
 </html>

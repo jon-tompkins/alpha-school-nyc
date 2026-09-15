@@ -147,5 +147,22 @@
     Alpha School · New York City — Parent Hub<br>
     A quick-links page for our families. Questions? Reach out in the <a href="https://chat.whatsapp.com/CGaclAvdIts4Y4ELGJW9E3" target="_blank" rel="noopener noreferrer">parents WhatsApp</a>.
   </footer>
+<script>
+/* lightweight, backend-free analytics (fun tracker — no cookies, no PII, just counts) */
+(function(){
+  var NS='alphanyc-897d3d7b0214';
+  var API='https://abacus.jasoncameron.dev/hit/'+NS+'/';
+  var day=new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'}); // YYYY-MM-DD (NYC)
+  function bump(k){ try{ fetch(API+k,{mode:'cors',keepalive:true}).catch(function(){});}catch(e){} }
+  bump('views-all'); bump('views-'+day);
+  var MAP=[['calendars/','calendar'],['2026-2027-Calendar','calendar'],['greentop.farm','lunch'],
+    ['timeback','timeback'],['alpha-campus-nine','workshops'],['whatsapp','whatsapp'],['canva','guides'],
+    ['community.alpha.school','community'],['experiences.school','afterschool'],['docs.google.com','familyguide']];
+  function slug(h){ for(var i=0;i<MAP.length;i++){ if(h.indexOf(MAP[i][0])>-1) return MAP[i][1]; } return null; }
+  document.querySelectorAll('a.card').forEach(function(a){
+    a.addEventListener('click',function(){ var s=slug(a.getAttribute('href')||''); if(s){ bump('click-'+s+'-all'); bump('click-'+s+'-'+day); } });
+  });
+})();
+</script>
 </body>
 </html>
