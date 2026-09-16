@@ -153,7 +153,9 @@
       '<div class="tags">'+e.groups.map(g=>'<span class="tg" style="background:'+colorFor(g)+'">'+g+'</span>').join('')+'</div>'+
       (e.notes?'<div class="notes">'+esc(e.notes)+'</div>':'')+
       '<div class="addcal"><button data-ics="'+EVENTS.indexOf(e)+'">📅 Add to calendar</button>'+
-      '<a href="'+gcal(e)+'" target="_blank" rel="noopener noreferrer">Google Calendar ↗</a></div></div>';
+      '<a href="'+gcal(e)+'" target="_blank" rel="noopener noreferrer">Google Calendar ↗</a>'+
+      (e.url?'<a href="'+esc(e.url)+'" target="_blank" rel="noopener noreferrer" style="background:#eaf1ff">🔗 Details / RSVP ↗</a>':'')+
+      '</div></div>';
   }
   function wire(){
     const p=$('#prev'),n=$('#next'),j=$('#jump');
