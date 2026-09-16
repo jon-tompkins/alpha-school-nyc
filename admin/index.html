@@ -103,7 +103,7 @@
     {s:'whatsapp',l:'Parents WhatsApp',e:'💬'},{s:'guides',l:'Meet the Guides',e:'🧑‍🏫'},
     {s:'community',l:'Community Portal',e:'🌐'},{s:'afterschool',l:'After-School',e:'🎨'},
     {s:'familyguide',l:'Family Guide',e:'📗'},{s:'contacts',l:'Who to Contact',e:'📇'},
-    {s:'parentportal',l:'Parent Portal',e:'🗂️'}];
+    {s:'parentportal',l:'Parent Portal',e:'🗂️'},{s:'events',l:'Events',e:'📆'}];
   const $=id=>document.getElementById(id);
   const body=document.body;
   function show(ok){ body.className = ok?'open':'locked'; $('panel').style.display=ok?'block':'none'; $('gate').style.display=ok?'none':'block'; if(ok) load(); }
@@ -120,15 +120,18 @@
 
   const nyDay=off=>{ const d=new Date(); d.setUTCDate(d.getUTCDate()-off); return d.toLocaleDateString('en-CA',{timeZone:'America/New_York'}); };
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  async function val(key,retry){ retry=retry||0;   // abacus limit = 30 req / 10s per IP → retry on 429
-    try{ const r=await fetch(GET+key,{mode:'cors'});
-      if(r.status===429){ if(retry<3){ await sleep(1500); return val(key,retry+1);} return 0; }
-      if(!r.ok) return 0;
-      const j=await r.json();
-      if(j&&typeof j.value==='number') return j.value;
-      if(j&&j.error){ if(retry<3){ await sleep(1500); return val(key,retry+1);} return 0; }
-      return 0;
-    }catch(e){ if(retry<3){ await sleep(1200); return val(key,retry+1);} return -1; } }
+  async function val(key,retry){ retry=retry||0;   // abacus limit = 30 req / 10s per IP → honor 429 retry-after
+    try{
+      const r=await fetch(GET+key,{mode:'cors'});
+      const txt=await r.text(); let j=null; try{ j=JSON.parse(txt); }catch(_){}
+      const limited = r.status===429 || (j && j.error && /too many/i.test(j.error));
+      if(limited){
+        if(retry<4){ const mm=/in\s+([\d.]+)\s*s/i.exec((j&&j.error)||txt); const w=Math.min(11000,(mm?parseFloat(mm[1])*1000:2000)+500); await sleep(w); return val(key,retry+1); }
+        return 0;
+      }
+      if(j && typeof j.value==='number') return j.value;
+      return 0; // missing counter (404) = no data yet
+    }catch(e){ if(retry<4){ await sleep(1500); return val(key,retry+1);} return -1; } }
 
   async function load(){
     $('updated').textContent='refreshing…';

@@ -63,7 +63,7 @@
   .t-wa{background:#e7f9ef;color:#1fae5a}.t-guide{background:#f3ecff;color:#7b4dff}
   .t-comm{background:#fff2e6;color:#f2820a}.t-after{background:#ffeef0;color:#f0455f}
   .t-fam{background:#e6f6fb;color:#0a97c4}.t-lunch{background:#eef7e6;color:#4e9f2f}.t-work{background:#eef0ff;color:#5b63e6}
-  .t-portal{background:#e6f6f2;color:#0f9488}
+  .t-portal{background:#e6f6f2;color:#0f9488}.t-events{background:#fdecef;color:#d23a5e}
 
   footer{padding:30px 0 46px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7}
   footer .rule{height:1px;background:var(--line);margin:0 0 22px}
@@ -86,6 +86,13 @@
   <main class="wrap">
     <div class="eyebrow">Quick links</div>
     <div class="grid">
+
+      <a class="card" href="events/">
+        <div class="ic t-events">📆</div>
+        <h2>Events &amp; Key Dates</h2>
+        <p>Browse what's coming up — and add any event straight to your own calendar.</p>
+        <span class="go">Open events <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
 
       <a class="card" href="https://alpha.school/wp-content/uploads/calendars/2026_27/2026-2027-Calendar-New-York.pdf" target="_blank" rel="noopener noreferrer">
         <div class="ic t-cal">📅</div>
@@ -185,7 +192,7 @@
   var day=new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'}); // YYYY-MM-DD (NYC)
   function bump(k){ try{ fetch(API+k,{mode:'cors',keepalive:true}).catch(function(){});}catch(e){} }
   bump('views-all'); bump('views-'+day);
-  var MAP=[['contacts/','contacts'],['calendars/','calendar'],['2026-2027-Calendar','calendar'],['greentop.farm','lunch'],
+  var MAP=[['events/','events'],['contacts/','contacts'],['calendars/','calendar'],['2026-2027-Calendar','calendar'],['greentop.farm','lunch'],
     ['loom.com','timeback'],['1GHwpbE9','timeback'],['timeback','timeback'],
     ['13S6sL1m','workshops'],['alpha-campus-nine','workshops'],['fsenrollment','parentportal'],
     ['whatsapp','whatsapp'],['canva','guides'],['community.alpha.school','community'],['experiences.school','afterschool'],

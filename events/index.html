@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Events & Key Dates · Alpha School NYC</title>
+<meta name="theme-color" content="#0a2540">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a2540'/%3E%3Ctext x='50' y='72' font-size='64' font-family='Georgia,serif' fill='white' text-anchor='middle'%3E%CE%B1%3C/text%3E%3C/svg%3E">
+<style>
+  :root{--navy:#0a2540;--ink:#12212e;--body:#41566a;--muted:#7f93a6;--line:#e6ecf3;--bg:#f6f9fc;--card:#fff;--accent:#1e6bff;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--shadow:0 1px 2px rgba(10,37,64,.04),0 8px 24px rgba(10,37,64,.06);}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--sans);background:var(--bg);color:var(--body);-webkit-font-smoothing:antialiased;line-height:1.5}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:860px;margin:0 auto;padding:0 18px}
+  header{background:linear-gradient(160deg,#0a2540 0%,#0e3157 55%,#123a63 100%);color:#fff;padding:24px 0 40px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;inset:auto 0 -1px 0;height:48px;background:radial-gradient(120% 60% at 50% 0,transparent 60%,var(--bg) 61%)}
+  .back{display:inline-flex;gap:6px;color:#bcd2ee;font-size:13px;font-weight:600}
+  .brandline{display:flex;align-items:center;gap:14px;margin-top:14px}
+  .brandline img{height:30px}
+  .htitle{margin-top:14px;font-size:25px;font-weight:750;letter-spacing:-.02em;color:#fff}
+  .tag{margin-top:7px;font-size:14px;color:#c7d7ea}
+  main{padding:22px 0 60px}
+  /* toolbar */
+  .bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .navbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:17px;cursor:pointer;display:grid;place-items:center;box-shadow:var(--shadow)}
+  .navbtn:hover{border-color:var(--accent);color:var(--accent)}
+  .mlabel{font-size:17px;font-weight:720;color:var(--ink);min-width:170px}
+  .today-btn{margin-left:auto;font-size:12.5px;font-weight:650;border:1px solid var(--line);background:var(--card);color:var(--body);padding:8px 12px;border-radius:9px;cursor:pointer}
+  .today-btn:hover{border-color:var(--accent);color:var(--accent)}
+  /* group filter */
+  .filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+  .chip{font-size:12px;font-weight:700;padding:6px 11px;border-radius:999px;border:1.5px solid transparent;cursor:pointer;user-select:none;background:#eef2f7;color:#54657a}
+  .chip.on{color:#fff}
+  .chip .dot{display:none}
+  /* calendar grid */
+  .cal{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:20px}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);background:#f0f4f9;border-bottom:1px solid var(--line)}
+  .dow div{padding:8px 0;text-align:center;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr)}
+  .cell{min-height:78px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:5px 5px 6px;position:relative;overflow:hidden}
+  .cell:nth-child(7n){border-right:0}
+  .cell.pad{background:#fafbfd}
+  .cell .dnum{font-size:12px;font-weight:650;color:var(--body);width:22px;height:22px;display:grid;place-items:center;border-radius:50%}
+  .cell.today .dnum{background:var(--accent);color:#fff}
+  .ev{margin-top:3px;font-size:10.5px;font-weight:600;color:#fff;border-radius:5px;padding:2px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+  .more{font-size:10px;color:var(--muted);font-weight:600;margin-top:2px;cursor:pointer}
+  @media(max-width:560px){ .cell{min-height:58px} .ev{font-size:0;padding:3px} .ev::before{content:"";display:block;width:100%;height:5px;border-radius:3px} }
+  /* agenda */
+  .agenda h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:6px 2px 12px}
+  .day{margin-bottom:14px}
+  .day .dlabel{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:7px}
+  .row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);margin-bottom:8px}
+  .row .rt{font-size:15px;font-weight:700;color:var(--ink)}
+  .row .rmeta{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .row .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+  .tg{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:6px;color:#fff}
+  .row .notes{font-size:13px;color:var(--body);margin-top:8px;line-height:1.5}
+  .addcal{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+  .addcal a,.addcal button{font-size:12.5px;font-weight:650;border-radius:8px;padding:7px 11px;cursor:pointer;border:1px solid var(--line);background:#f6f9fc;color:var(--accent);display:inline-flex;align-items:center;gap:5px}
+  .addcal a:hover,.addcal button:hover{border-color:var(--accent)}
+  .empty{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:34px 20px;text-align:center;color:var(--muted);font-size:14px}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:6px 0 40px}
+  footer a{font-weight:600}
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="back" href="../">← Back to Parent Hub</a>
+      <div class="brandline"><img src="../assets/alpha-white.svg" alt="Alpha School"></div>
+      <h1 class="htitle">Events &amp; Key Dates</h1>
+      <p class="tag">Browse what's coming up. Tap any event to add it to your own calendar.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="app"><div class="empty">Loading…</div></div>
+    <footer>Alpha School · New York City — tap <b>Add to calendar</b> on any event. Questions? See <a href="../contacts/">Who to Contact</a>.</footer>
+  </main>
+
+<script src="events.js"></script>
+<script>
+  const EVENTS = (window.EVENTS||[]).slice();
+  const $=s=>document.querySelector(s), app=$('#app');
+  const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  // group tag colors (stable palette by first-seen order)
+  const PALETTE=['#1e6bff','#0f9488','#7b4dff','#f2820a','#e0455f','#4e9f2f','#0a97c4','#b0177a','#5b63e6','#c47d00'];
+  const groupColor={}; let gi=0;
+  function colorFor(g){ if(!groupColor[g]){ groupColor[g]=g.toLowerCase()==='all'?'#0a2540':PALETTE[gi++%PALETTE.length]; } return groupColor[g]; }
+  // normalize
+  EVENTS.forEach(e=>{ e._d=e.date; e.groups=e.groups&&e.groups.length?e.groups:['All']; e.groups.forEach(colorFor); });
+  EVENTS.sort((a,b)=> a.date===b.date ? (a.start||'').localeCompare(b.start||'') : a.date.localeCompare(b.date));
+
+  const allGroups=[...new Set(EVENTS.flatMap(e=>e.groups))];
+  const active=new Set(allGroups); // all on by default
+  let cur=new Date(); cur.setDate(1);
+  if(EVENTS.length){ const now=todayISO(); const up=EVENTS.find(e=>e.date>=now)||EVENTS[EVENTS.length-1]; const d=new Date(up.date+'T00:00'); cur=new Date(d.getFullYear(),d.getMonth(),1); }
+
+  function todayISO(){ return new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'}); }
+  function fmtDay(iso){ const d=new Date(iso+'T00:00'); return DOW[d.getDay()]+', '+MONTHS[d.getMonth()]+' '+d.getDate(); }
+  function fmtTime(t){ if(!t)return''; let[h,m]=t.split(':').map(Number); const ap=h>=12?'pm':'am'; h=h%12||12; return h+(m?':'+String(m).padStart(2,'0'):'')+ap; }
+  function visible(e){ return e.groups.some(g=>active.has(g)); }
+
+  function render(){
+    if(!EVENTS.length){ app.innerHTML='<div class="empty">📅 No events posted yet — check back soon.</div>'; return; }
+    const y=cur.getFullYear(), m=cur.getMonth();
+    let h='';
+    // toolbar
+    h+='<div class="bar"><button class="navbtn" id="prev">‹</button><span class="mlabel">'+MONTHS[m]+' '+y+'</span><button class="navbtn" id="next">›</button><button class="today-btn" id="jump">Today</button></div>';
+    // filters
+    if(allGroups.length>1){ h+='<div class="filters">'+allGroups.map(g=>'<span class="chip '+(active.has(g)?'on':'')+'" data-g="'+g+'" style="'+(active.has(g)?'background:'+colorFor(g)+';border-color:'+colorFor(g):'')+'">'+g+'</span>').join('')+'</div>'; }
+    // calendar grid
+    h+='<div class="cal"><div class="dow">'+DOW.map(d=>'<div>'+d+'</div>').join('')+'</div><div class="grid">';
+    const first=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate(), today=todayISO();
+    for(let i=0;i<first;i++) h+='<div class="cell pad"></div>';
+    for(let d=1;d<=dim;d++){
+      const iso=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+      const evs=EVENTS.filter(e=>onDay(e,iso)&&visible(e));
+      h+='<div class="cell'+(iso===today?' today':'')+'">'+'<div class="dnum">'+d+'</div>';
+      evs.slice(0,3).forEach(e=>{ h+='<div class="ev" style="background:'+colorFor(e.groups[0])+'" data-id="'+EVENTS.indexOf(e)+'" title="'+esc(e.title)+'">'+esc(e.title)+'</div>'; });
+      if(evs.length>3) h+='<div class="more">+'+(evs.length-3)+' more</div>';
+      h+='</div>';
+    }
+    h+='</div></div>';
+    // agenda for this month
+    const monthEvents=EVENTS.filter(e=> e.date.slice(0,7)===(y+'-'+String(m+1).padStart(2,'0')) && visible(e));
+    h+='<div class="agenda"><h3>'+MONTHS[m]+' agenda</h3>';
+    if(!monthEvents.length){ h+='<div class="empty">Nothing on the calendar this month'+(active.size<allGroups.length?' for the selected groups':'')+'.</div>'; }
+    else {
+      let lastDay='';
+      monthEvents.forEach(e=>{
+        if(e.date!==lastDay){ if(lastDay)h+='</div>'; h+='<div class="day"><div class="dlabel">'+fmtDay(e.date)+(e.end&&e.end!==e.date?' – '+fmtDay(e.end):'')+'</div>'; lastDay=e.date; }
+        h+=rowHTML(e);
+      });
+      if(lastDay)h+='</div>';
+    }
+    h+='</div>';
+    app.innerHTML=h;
+    wire();
+  }
+  function onDay(e,iso){ const s=e.date, en=e.end||e.date; return iso>=s && iso<=en; }
+  function rowHTML(e){
+    const time = e.start ? fmtTime(e.start)+(e.finish?'–'+fmtTime(e.finish):'') : 'All day';
+    return '<div class="row"><div class="rt">'+esc(e.title)+'</div>'+
+      '<div class="rmeta">'+time+(e.location?' · '+esc(e.location):'')+'</div>'+
+      '<div class="tags">'+e.groups.map(g=>'<span class="tg" style="background:'+colorFor(g)+'">'+g+'</span>').join('')+'</div>'+
+      (e.notes?'<div class="notes">'+esc(e.notes)+'</div>':'')+
+      '<div class="addcal"><button data-ics="'+EVENTS.indexOf(e)+'">📅 Add to calendar</button>'+
+      '<a href="'+gcal(e)+'" target="_blank" rel="noopener noreferrer">Google Calendar ↗</a></div></div>';
+  }
+  function wire(){
+    const p=$('#prev'),n=$('#next'),j=$('#jump');
+    if(p)p.onclick=()=>{cur=new Date(cur.getFullYear(),cur.getMonth()-1,1);render();};
+    if(n)n.onclick=()=>{cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);render();};
+    if(j)j.onclick=()=>{const t=new Date();cur=new Date(t.getFullYear(),t.getMonth(),1);render();};
+    document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{const g=c.dataset.g; active.has(g)?active.delete(g):active.add(g); if(!active.size)active.add(g); render();});
+    document.querySelectorAll('.ev,[data-id]').forEach(el=>{ if(el.dataset.id) el.onclick=()=>{ document.querySelectorAll('.row')[0]; location.hash=''; render(); }; });
+    document.querySelectorAll('[data-ics]').forEach(b=>b.onclick=()=>downloadICS(EVENTS[+b.dataset.ics]));
+  }
+  // ---- calendar exports ----
+  function esc(s){ return String(s).replace(/[<&>]/g,c=>({'<':'&lt;','&':'&amp;','>':'&gt;'}[c])); }
+  function icsEsc(s){ return String(s).replace(/([,;\\])/g,'\\$1').replace(/\n/g,'\\n'); }
+  function stamp(){ return new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z'; }
+  function addDayISO(iso){ const d=new Date(iso+'T00:00'); d.setDate(d.getDate()+1); return d.toISOString().slice(0,10); }
+  function toICS(e){
+    const allday=!e.start, L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//AlphaNYC//ParentHub//EN','CALSCALE:GREGORIAN','BEGIN:VEVENT','UID:'+(e.title+e.date).replace(/\W/g,'')+'@alphanycparents.xyz','DTSTAMP:'+stamp()];
+    if(allday){ L.push('DTSTART;VALUE=DATE:'+e.date.replace(/-/g,'')); L.push('DTEND;VALUE=DATE:'+addDayISO(e.end||e.date).replace(/-/g,'')); }
+    else { L.push('DTSTART:'+e.date.replace(/-/g,'')+'T'+e.start.replace(':','')+'00'); L.push('DTEND:'+(e.end||e.date).replace(/-/g,'')+'T'+((e.finish||e.start).replace(':',''))+'00'); }
+    L.push('SUMMARY:'+icsEsc(e.title)); if(e.location)L.push('LOCATION:'+icsEsc(e.location)); if(e.notes)L.push('DESCRIPTION:'+icsEsc(e.notes));
+    L.push('END:VEVENT','END:VCALENDAR'); return L.join('\r\n');
+  }
+  function downloadICS(e){ const b=new Blob([toICS(e)],{type:'text/calendar'}); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=e.title.replace(/[^\w]+/g,'-').replace(/^-|-$/g,'')+'.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500); }
+  function gcal(e){
+    const allday=!e.start;
+    const dates = allday ? e.date.replace(/-/g,'')+'/'+addDayISO(e.end||e.date).replace(/-/g,'')
+      : e.date.replace(/-/g,'')+'T'+e.start.replace(':','')+'00/'+(e.end||e.date).replace(/-/g,'')+'T'+((e.finish||e.start).replace(':',''))+'00';
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title)+'&dates='+dates+(e.location?'&location='+encodeURIComponent(e.location):'')+(e.notes?'&details='+encodeURIComponent(e.notes):'');
+  }
+  render();
+</script>
+</body>
+</html>
