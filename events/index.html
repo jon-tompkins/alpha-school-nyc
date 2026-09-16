@@ -138,6 +138,10 @@
       if(lastDay)h+='</div>';
     }
     h+='</div>';
+    if(window.TBD&&window.TBD.length){
+      h+='<div class="agenda" style="margin-top:22px"><h3>Still to be scheduled</h3>'+
+         '<div class="empty" style="text-align:left;line-height:1.9">'+window.TBD.map(x=>'📌 '+esc(x)).join('<br>')+'</div></div>';
+    }
     app.innerHTML=h;
     wire();
   }
