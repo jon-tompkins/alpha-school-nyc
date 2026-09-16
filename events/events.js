@@ -42,7 +42,30 @@ window.EVENTS = [
   { title:"Coffee & Conversations (L2 / MS / HS)", date:"2027-03-05", start:"08:45", finish:"09:45", location:"180 Maiden Lane", groups:["L2","MS","HS"], notes:"Informal monthly coffee after drop-off." },
   { title:"Coffee & Conversations (L2 / MS / HS)", date:"2027-04-02", start:"08:45", finish:"09:45", location:"180 Maiden Lane", groups:["L2","MS","HS"], notes:"Informal monthly coffee after drop-off." },
   { title:"Coffee & Conversations (L2 / MS / HS)", date:"2027-05-07", start:"08:45", finish:"09:45", location:"180 Maiden Lane", groups:["L2","MS","HS"], notes:"Informal monthly coffee after drop-off." },
-  { title:"Coffee & Conversations (L2 / MS / HS)", date:"2027-06-04", start:"08:45", finish:"09:45", location:"180 Maiden Lane", groups:["L2","MS","HS"], notes:"Informal monthly coffee after drop-off." }
+  { title:"Coffee & Conversations (L2 / MS / HS)", date:"2027-06-04", start:"08:45", finish:"09:45", location:"180 Maiden Lane", groups:["L2","MS","HS"], notes:"Informal monthly coffee after drop-off." },
+
+  // ── Academic calendar 2026–2027 (all-day: first/last day, sessions, breaks/no-school, MAP testing, 12pm dismissals) ──
+  { title:"First Day of School", date:"2026-09-08", groups:["All"] },
+  { title:"MAP Testing", date:"2026-09-15", end:"2026-09-18", groups:["All"] },
+  { title:"Fall MAP Retesting", date:"2026-09-21", end:"2026-09-25", groups:["All"] },
+  { title:"Session 1 Ends / Dismissal at 12 Noon", date:"2026-10-16", groups:["All"] },
+  { title:"Session 2 Starts", date:"2026-10-19", groups:["All"] },
+  { title:"Thanksgiving Break (No School)", date:"2026-11-23", end:"2026-11-27", groups:["All"] },
+  { title:"Session 2 Ends / Dismissal at 12 Noon", date:"2026-12-18", groups:["All"] },
+  { title:"Session Break (No School)", date:"2026-12-21", end:"2027-01-01", groups:["All"] },
+  { title:"Session 3 Starts", date:"2027-01-04", groups:["All"] },
+  { title:"No School / MLK Day", date:"2027-01-18", groups:["All"] },
+  { title:"Winter MAP Retesting", date:"2027-02-01", end:"2027-02-05", groups:["All"] },
+  { title:"Session 3 Ends / Dismissal at 12 Noon", date:"2027-02-19", groups:["All"] },
+  { title:"Session Break (No School)", date:"2027-02-22", end:"2027-02-23", groups:["All"] },
+  { title:"Session 4 Starts", date:"2027-02-24", groups:["All"] },
+  { title:"Session 4 Ends / Dismissal at 12 Noon", date:"2027-04-16", groups:["All"] },
+  { title:"Session Break (No School)", date:"2027-04-19", end:"2027-04-23", groups:["All"] },
+  { title:"Session 5 Starts", date:"2027-04-26", groups:["All"] },
+  { title:"Spring MAP Testing", date:"2027-05-18", end:"2027-05-21", groups:["All"] },
+  { title:"Spring MAP Retesting", date:"2027-05-24", end:"2027-05-28", groups:["All"] },
+  { title:"No School / Memorial Day", date:"2027-05-31", groups:["All"] },
+  { title:"Last Day / Session 5 Ends / Dismissal at 12 Noon", date:"2027-06-18", groups:["All"] },
 ];
 
 // Announced but not yet dated — shown in a "Still to be scheduled" note on the page.
