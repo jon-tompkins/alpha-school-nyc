@@ -110,7 +110,6 @@
   function show(ok){ body.className = ok?'open':'locked'; $('panel').style.display=ok?'block':'none'; $('gate').style.display=ok?'none':'block'; if(ok) load(); }
   async function sha256(s){ if(window.crypto&&crypto.subtle){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); } return null; }
   // gate
-  if(sessionStorage.getItem(KEY)==='1') show(true);
   $('gate').addEventListener('submit',async e=>{ e.preventDefault();
     const h=await sha256($('pw').value);
     if(h===null){ $('err').textContent='Please open this page over https://'; return; }
@@ -177,6 +176,10 @@
     $(id).innerHTML=rows.map(r=>'<div class="lrow"><span class="ic">'+r.it.e+'</span><span class="nm">'+r.it.l+'</span>'+
       '<span class="bar"><i style="width:'+Math.round((r.n/max)*100)+'%"></i></span><span class="n">'+r.n+'</span></div>').join('');
   }
+
+  // auto-unlock if this browser already authenticated this session
+  // (must run AFTER all const/function decls above so load() doesn't hit a temporal-dead-zone error)
+  if(sessionStorage.getItem(KEY)==='1') show(true);
 </script>
 </body>
 </html>
