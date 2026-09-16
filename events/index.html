@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Events & Key Dates · Alpha School NYC</title>
 <meta name="theme-color" content="#0a2540">
+<script>(function(){try{fetch("/version.json?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){var k="anyc_v",s=localStorage.getItem(k);if(s&&s!==j.v){localStorage.setItem(k,j.v);location.reload()}else localStorage.setItem(k,j.v)}).catch(function(){})}catch(e){}})();</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a2540'/%3E%3Ctext x='50' y='72' font-size='64' font-family='Georgia,serif' fill='white' text-anchor='middle'%3E%CE%B1%3C/text%3E%3C/svg%3E">
 <style>
   :root{--navy:#0a2540;--ink:#12212e;--body:#41566a;--muted:#7f93a6;--line:#e6ecf3;--bg:#f6f9fc;--card:#fff;--accent:#1e6bff;
@@ -80,9 +81,8 @@
     <footer>Alpha School · New York City — tap <b>Add to calendar</b> on any event. Questions? See <a href="../contacts/">Who to Contact</a>.</footer>
   </main>
 
-<script src="events.js"></script>
 <script>
-  const EVENTS = (window.EVENTS||[]).slice();
+  let EVENTS=[], allGroups=[], active=new Set();
   const $=s=>document.querySelector(s), app=$('#app');
   const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
   const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -90,14 +90,16 @@
   const PALETTE=['#1e6bff','#0f9488','#7b4dff','#f2820a','#e0455f','#4e9f2f','#0a97c4','#b0177a','#5b63e6','#c47d00'];
   const groupColor={}; let gi=0;
   function colorFor(g){ if(!groupColor[g]){ groupColor[g]=g.toLowerCase()==='all'?'#0a2540':PALETTE[gi++%PALETTE.length]; } return groupColor[g]; }
-  // normalize
-  EVENTS.forEach(e=>{ e._d=e.date; e.groups=e.groups&&e.groups.length?e.groups:['All']; e.groups.forEach(colorFor); });
-  EVENTS.sort((a,b)=> a.date===b.date ? (a.start||'').localeCompare(b.start||'') : a.date.localeCompare(b.date));
-
-  const allGroups=[...new Set(EVENTS.flatMap(e=>e.groups))];
-  const active=new Set(allGroups); // all on by default
   let cur=new Date(); cur.setDate(1);
-  if(EVENTS.length){ const now=todayISO(); const up=EVENTS.find(e=>e.date>=now)||EVENTS[EVENTS.length-1]; const d=new Date(up.date+'T00:00'); cur=new Date(d.getFullYear(),d.getMonth(),1); }
+  function init(){
+    EVENTS=(window.EVENTS||[]).slice();
+    EVENTS.forEach(e=>{ e.groups=e.groups&&e.groups.length?e.groups:['All']; e.groups.forEach(colorFor); });
+    EVENTS.sort((a,b)=> a.date===b.date ? (a.start||'').localeCompare(b.start||'') : a.date.localeCompare(b.date));
+    allGroups=[...new Set(EVENTS.flatMap(e=>e.groups))];
+    active=new Set(allGroups);
+    if(EVENTS.length){ const now=todayISO(); const up=EVENTS.find(e=>e.date>=now)||EVENTS[EVENTS.length-1]; const d=new Date(up.date+'T00:00'); cur=new Date(d.getFullYear(),d.getMonth(),1); }
+    render();
+  }
 
   function todayISO(){ return new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'}); }
   function fmtDay(iso){ const d=new Date(iso+'T00:00'); return DOW[d.getDay()]+', '+MONTHS[d.getMonth()]+' '+d.getDate(); }
@@ -178,14 +180,22 @@
     L.push('SUMMARY:'+icsEsc(e.title)); if(e.location)L.push('LOCATION:'+icsEsc(e.location)); if(e.notes)L.push('DESCRIPTION:'+icsEsc(e.notes));
     L.push('END:VEVENT','END:VCALENDAR'); return L.join('\r\n');
   }
-  function downloadICS(e){ const b=new Blob([toICS(e)],{type:'text/calendar'}); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=e.title.replace(/[^\w]+/g,'-').replace(/^-|-$/g,'')+'.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500); }
+  function downloadICS(e){
+    const u=URL.createObjectURL(new Blob([toICS(e)],{type:'text/calendar;charset=utf-8'}));
+    const ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+    if(ios){ window.location.href=u; setTimeout(()=>URL.revokeObjectURL(u),6000); }      // iOS: open the .ics so Calendar offers "Add"
+    else { const a=document.createElement('a'); a.href=u; a.download=e.title.replace(/[^\w]+/g,'-').replace(/^-|-$/g,'')+'.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500); }
+  }
   function gcal(e){
     const allday=!e.start;
     const dates = allday ? e.date.replace(/-/g,'')+'/'+addDayISO(e.end||e.date).replace(/-/g,'')
       : e.date.replace(/-/g,'')+'T'+e.start.replace(':','')+'00/'+(e.end||e.date).replace(/-/g,'')+'T'+((e.finish||e.start).replace(':',''))+'00';
     return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title)+'&dates='+dates+(e.location?'&location='+encodeURIComponent(e.location):'')+(e.notes?'&details='+encodeURIComponent(e.notes):'');
   }
-  render();
+  // load event data fresh each visit (cache-busted so saved/home-screen users always get new events)
+  (function(){ var s=document.createElement('script'); s.src='events.js?t='+Math.floor(Date.now()/60000);
+    s.onload=init; s.onerror=function(){ app.innerHTML='<div class="empty">Couldn\'t load events — please refresh.</div>'; };
+    document.head.appendChild(s); })();
 </script>
 </body>
 </html>
