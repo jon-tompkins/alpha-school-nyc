@@ -43,7 +43,16 @@
   .tile .val{font-size:28px;font-weight:720;color:var(--ink);margin-top:5px;font-variant-numeric:tabular-nums}
   .tile .val small{font-size:14px;color:var(--body);font-weight:600}
   .sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
-  .sec h3{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px}
+  .sec h3{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0}
+  .sechead{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;margin-bottom:14px;-webkit-tap-highlight-color:transparent}
+  .sechead .sp{flex:1}
+  .chev{font-size:11px;color:var(--muted);transition:transform .2s;display:inline-block;width:11px;text-align:center}
+  .sec.collapsed .sechead{margin-bottom:0}
+  .sec.collapsed .chev{transform:rotate(-90deg)}
+  .sec.collapsed .secbody{display:none}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;flex-shrink:0}
+  .seg button{border:0;background:var(--card);color:var(--muted);font:600 11.5px var(--sans);padding:6px 12px;cursor:pointer;transition:background .15s,color .15s}
+  .seg button.on{background:var(--accent);color:#fff}
   /* leaderboard rows */
   .lrow{display:flex;align-items:center;gap:11px;padding:7px 0}
   .lrow .ic{width:30px;text-align:center;font-size:17px;flex-shrink:0}
@@ -86,9 +95,20 @@
     </div>
     <div class="wrap">
       <div class="tiles" id="tiles"></div>
-      <div class="sec"><h3>Clicks by item · all time</h3><div id="leader"><div class="loading">loading…</div></div></div>
-      <div class="sec"><h3>Clicks by item · today</h3><div id="today"><div class="loading">loading…</div></div></div>
-      <div class="sec"><h3>Site visits · last 5 days</h3><div id="traffic"><div class="loading">loading…</div></div></div>
+      <div class="sec" id="sec-clicks">
+        <div class="sechead" data-body="body-clicks">
+          <span class="chev">▾</span><h3>Clicks by item</h3><span class="sp"></span>
+          <div class="seg" id="clicksSeg">
+            <button type="button" data-mode="all" class="on">All time</button>
+            <button type="button" data-mode="today">Today</button>
+          </div>
+        </div>
+        <div class="secbody" id="body-clicks"><div id="clicksList"><div class="loading">loading…</div></div></div>
+      </div>
+      <div class="sec" id="sec-traffic">
+        <div class="sechead" data-body="body-traffic"><span class="chev">▾</span><h3>Site visits · last 5 days</h3></div>
+        <div class="secbody" id="body-traffic"><div id="traffic"><div class="loading">loading…</div></div></div>
+      </div>
       <div class="note">Counts are collected with a lightweight cookie-free counter (no personal data). This admin page is gated in the browser only — a soft gate, not strong security.</div>
     </div>
   </div>
@@ -107,6 +127,8 @@
     {s:'parentportal',l:'Parent Portal',e:'🗂️'},{s:'events',l:'Events',e:'📆'}];
   const $=id=>document.getElementById(id);
   const body=document.body;
+  const G={all:[],today:[],mode:'all'};  // clicks-by-item state
+  function renderClicks(){ const arr=G.mode==='today'?G.today:G.all; renderBars('clicksList',ITEMS.map((it,i)=>({it,n:(arr[i]||0)}))); }
   function show(ok){ body.className = ok?'open':'locked'; $('panel').style.display=ok?'block':'none'; $('gate').style.display=ok?'none':'block'; if(ok) load(); }
   async function sha256(s){ if(window.crypto&&crypto.subtle){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); } return null; }
   // gate
@@ -144,7 +166,7 @@
     const pDaily = Promise.all(days.map(d=>val('views-'+d)));
     const [views,itemsAll,itemsToday,daily] = await Promise.all([pViews,pItemsAll,pItemsToday,pDaily]);
 
-    if(views===-1){ $('leader').innerHTML='<div class="muted-empty">Couldn\'t reach the analytics service — try Refresh in a moment.</div>'; $('updated').textContent=''; return; }
+    if(views===-1){ $('clicksList').innerHTML='<div class="muted-empty">Couldn\'t reach the analytics service — try Refresh in a moment.</div>'; $('updated').textContent=''; return; }
     const clean=a=>a.map(x=>x<0?0:x);
     const iAll=clean(itemsAll), iToday=clean(itemsToday), dly=clean(daily);
     const totalClicks=iAll.reduce((s,x)=>s+x,0);
@@ -155,9 +177,9 @@
     $('tiles').innerHTML=
       tile('Total visits',views)+tile('Visits today',totalToday)+tile('Total link clicks',totalClicks)+
       tile('Top link', totalClicks? (ITEMS[bi].e+' '+ITEMS[bi].l):'—', true);
-    // leaderboard (all time)
-    renderBars('leader',ITEMS.map((it,i)=>({it,n:iAll[i]})));
-    renderBars('today',ITEMS.map((it,i)=>({it,n:iToday[i]})));
+    // clicks by item — stash both series, render active mode
+    G.all=iAll; G.today=iToday;
+    renderClicks();
     // 14-day traffic
     const max=Math.max.apply(null,dly.concat([1]));
     $('traffic').innerHTML='<div class="chart">'+days.map((d,i)=>{
@@ -176,6 +198,18 @@
     $(id).innerHTML=rows.map(r=>'<div class="lrow"><span class="ic">'+r.it.e+'</span><span class="nm">'+r.it.l+'</span>'+
       '<span class="bar"><i style="width:'+Math.round((r.n/max)*100)+'%"></i></span><span class="n">'+r.n+'</span></div>').join('');
   }
+
+  // collapse/expand any section by clicking its header (ignore clicks on the toggle)
+  document.querySelectorAll('.sechead').forEach(h=>{
+    h.addEventListener('click',e=>{ if(e.target.closest('.seg')) return; h.closest('.sec').classList.toggle('collapsed'); });
+  });
+  // All time / Today toggle for clicks-by-item
+  $('clicksSeg').addEventListener('click',e=>{
+    const b=e.target.closest('button[data-mode]'); if(!b) return;
+    G.mode=b.dataset.mode;
+    $('clicksSeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+    renderClicks();
+  });
 
   // auto-unlock if this browser already authenticated this session
   // (must run AFTER all const/function decls above so load() doesn't hit a temporal-dead-zone error)
