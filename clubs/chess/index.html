@@ -183,29 +183,38 @@ function initials(name){
   return (a+b).toUpperCase() || "?";
 }
 
-async function load(){
-  if(SHARED){
-    try{
-      var r = await fetch(STORE_URL, {cache:"no-store"});
-      var j = await r.json();
-      responses = Array.isArray(j.responses) ? j.responses : [];
-    }catch(e){ responses = []; }
-  } else {
-    try{ responses = JSON.parse(localStorage.getItem(LS_KEY) || "[]"); }
-    catch(e){ responses = []; }
-  }
+function ensureIds(){
+  responses.forEach(function(r){ if(!r.id) r.id = (r.at||Date.now()) + "-" + Math.random().toString(36).slice(2,6); });
 }
+async function apiGet(){
+  var r = await fetch(STORE_URL, {cache:"no-store"});
+  var j = await r.json();
+  return Array.isArray(j.responses) ? j.responses : [];
+}
+// POST as text/plain to avoid a CORS preflight against the Apps Script web app.
+async function apiPost(payload){
+  var r = await fetch(STORE_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) });
+  var j = await r.json();
+  return Array.isArray(j.responses) ? j.responses : null;
+}
+function saveLocal(){ localStorage.setItem(LS_KEY, JSON.stringify(responses)); }
 
-async function persist(){
+async function load(){
+  if(SHARED){ try{ responses = await apiGet(); }catch(e){ responses = []; } }
+  else { try{ responses = JSON.parse(localStorage.getItem(LS_KEY) || "[]"); }catch(e){ responses = []; } }
+  ensureIds();
+}
+async function addRecord(rec){
   if(SHARED){
-    // read-modify-write the whole doc
-    await fetch(STORE_URL, {
-      method:"PUT", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ club:"chess", responses: responses })
-    });
-  } else {
-    localStorage.setItem(LS_KEY, JSON.stringify(responses));
-  }
+    var upd = await apiPost({ action:"add", record: rec });
+    if(upd){ responses = upd; ensureIds(); } else { responses.push(rec); } // optimistic on failure
+  } else { responses.push(rec); saveLocal(); }
+}
+async function deleteRecord(id){
+  if(SHARED){
+    var upd = await apiPost({ action:"delete", id: id });
+    if(upd){ responses = upd; ensureIds(); } else { responses = responses.filter(function(r){ return r.id !== id; }); }
+  } else { responses = responses.filter(function(r){ return r.id !== id; }); saveLocal(); }
 }
 
 function render(){
@@ -235,15 +244,15 @@ function render(){
         + '<td>'+escapeHtml(r.name)+'</td>'
         + '<td><span class="lvtag"><span class="dot" style="background:'+(COLORS[r.level]||"#7f93a6")+'"></span>'+escapeHtml(r.level)+'</span></td>'
         + '<td class="daylist">'+days+'</td>'
-        + '<td style="text-align:right"><button class="del" title="Remove" data-i="'+i+'">✕</button></td>'
+        + '<td style="text-align:right"><button class="del" title="Remove" data-id="'+escapeAttr(r.id)+'">✕</button></td>'
         + '</tr>';
     }).join("");
     wrap.innerHTML = '<table><thead><tr><th>Name</th><th>Grade</th><th>Days available</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
     wrap.querySelectorAll(".del").forEach(function(b){
       b.addEventListener("click", async function(){
-        var i = +b.getAttribute("data-i");
-        responses.splice(i,1);
-        await persist(); render();
+        b.disabled = true;
+        await deleteRecord(b.getAttribute("data-id"));
+        render();
       });
     });
   }
@@ -266,8 +275,9 @@ $("form").addEventListener("submit", async function(e){
     return;
   }
   $("submitBtn").disabled = true;
-  responses.push({ name:name, level:level, days:days, at:Date.now() });
-  try{ await persist(); }catch(err){ /* keep local copy regardless */ }
+  var now = Date.now();
+  var rec = { id: now + "-" + Math.random().toString(36).slice(2,6), name:name, level:level, days:days, at:now };
+  try{ await addRecord(rec); }catch(err){ responses.push(rec); /* keep entry regardless */ }
   render();
   // reset
   $("form").reset();
