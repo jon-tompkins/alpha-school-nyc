@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chess Club Interest · Alpha School NYC</title>
+<meta name="description" content="Sign up interest for the Alpha School NYC chess club — add your child, their level, and the days they're available.">
+<meta name="theme-color" content="#0a2540">
+<script>(function(){try{fetch("/version.json?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){var k="anyc_v",s=localStorage.getItem(k);if(s&&s!==j.v){localStorage.setItem(k,j.v);location.reload()}else localStorage.setItem(k,j.v)}).catch(function(){})}catch(e){}})();</script>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a2540'/%3E%3Ctext x='50' y='72' font-size='64' font-family='Georgia,serif' fill='white' text-anchor='middle'%3E%CE%B1%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --navy:#0a2540; --ink:#12212e; --body:#41566a; --muted:#7f93a6;
+    --line:#e6ecf3; --bg:#f6f9fc; --card:#ffffff; --accent:#1e6bff; --accent-soft:#eaf1ff;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --shadow:0 1px 2px rgba(10,37,64,.04),0 8px 24px rgba(10,37,64,.06);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--bg);color:var(--body);-webkit-font-smoothing:antialiased;line-height:1.55}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
+
+  header{background:linear-gradient(160deg,#0a2540 0%,#0e3157 55%,#123a63 100%);color:#fff;padding:26px 0 40px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;inset:auto 0 -1px 0;height:52px;background:radial-gradient(120% 60% at 50% 0,transparent 60%,var(--bg) 61%)}
+  .brandline{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .brandline img{height:32px;width:auto;display:block}
+  .back{font-size:13px;color:#bcd2ee;display:inline-flex;align-items:center;gap:6px}
+  .back:hover{color:#fff}
+  .htitle{margin-top:18px;font-size:26px;font-weight:750;letter-spacing:-.02em;color:#fff;line-height:1.15;display:flex;align-items:center;gap:10px}
+  .tag{margin-top:9px;max-width:640px;font-size:15px;color:#c7d7ea}
+
+  main{padding:28px 0 20px}
+  .sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-bottom:18px}
+  .sec h2{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+
+  /* form */
+  form .row{display:flex;flex-wrap:wrap;gap:14px}
+  form .fld{flex:1;min-width:180px}
+  label{display:block;font-size:12.5px;font-weight:650;color:var(--ink);margin-bottom:6px}
+  input[type=text],select{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:500 15px var(--sans);color:var(--ink);background:#fff;outline:none}
+  input[type=text]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px #1e6bff22}
+  .days{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+  .day-chip{position:relative}
+  .day-chip input{position:absolute;opacity:0;pointer-events:none}
+  .day-chip span{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-size:14px;font-weight:600;color:var(--body);cursor:pointer;user-select:none;transition:all .12s}
+  .day-chip input:checked + span{background:var(--accent);border-color:var(--accent);color:#fff}
+  .day-chip input:focus-visible + span{box-shadow:0 0 0 3px #1e6bff33}
+  .submit{margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  button.primary{border:0;border-radius:11px;background:var(--accent);color:#fff;font:650 15px var(--sans);padding:12px 20px;cursor:pointer}
+  button.primary:hover{background:#1559e0}
+  button.primary:disabled{opacity:.5;cursor:not-allowed}
+  .note{font-size:12.5px;color:var(--muted)}
+  .ok{color:#12a150;font-weight:650;font-size:13.5px}
+
+  /* legend */
+  .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+  .legend .lv{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+
+  /* calendar */
+  .cal{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .col{border:1px solid var(--line);border-radius:12px;padding:10px 8px;background:#fbfdff;min-height:120px}
+  .col h3{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:4px}
+  .col .cnt{display:block;text-align:center;font-size:11px;color:var(--muted);margin-bottom:8px}
+  .circles{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+  .kid{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:750;color:#fff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);cursor:default}
+  .col .empty{display:block;text-align:center;font-size:11px;color:#b7c4d3;margin-top:14px}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+  th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  td .lvtag{display:inline-flex;align-items:center;gap:6px;font-weight:650;color:var(--ink)}
+  td .daylist{color:var(--body)}
+  .del{border:0;background:none;color:var(--muted);cursor:pointer;font-size:15px;padding:2px 6px;border-radius:6px}
+  .del:hover{color:#e0455f;background:#fdecef}
+  .muted-empty{color:var(--muted);font-size:13.5px;padding:10px 2px}
+  .src{font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.6}
+  footer{padding:26px 0 46px;text-align:center;color:var(--muted);font-size:12.5px}
+  footer a{color:var(--accent);font-weight:600}
+  @media(max-width:620px){.cal{grid-template-columns:repeat(5,1fr);gap:5px}.col{padding:8px 4px}.kid{width:22px;height:22px;font-size:9px}.htitle{font-size:22px}}
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brandline">
+        <a href="/" aria-label="Alpha School NYC Parent Hub" style="display:inline-flex"><img src="/assets/alpha-white.svg" alt="Alpha School"></a>
+        <a class="back" href="/">← Parent Hub</a>
+      </div>
+      <h1 class="htitle"><span>♟️</span> Chess Club — Interest</h1>
+      <p class="tag">Tell us your child's level and which days they could come. See who's in and which days work best below.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- FORM -->
+    <div class="sec">
+      <h2>Add your child</h2>
+      <form id="form" autocomplete="off">
+        <div class="row">
+          <div class="fld">
+            <label for="name">Child's name</label>
+            <input id="name" type="text" placeholder="e.g. Alex R." maxlength="40" required>
+          </div>
+          <div class="fld" style="max-width:200px">
+            <label for="level">Level</label>
+            <select id="level" required>
+              <option value="" disabled selected>Select…</option>
+              <option value="LL">LL</option>
+              <option value="L1">L1</option>
+              <option value="L2">L2</option>
+              <option value="L3">L3</option>
+              <option value="L4">L4</option>
+              <option value="L5">L5</option>
+            </select>
+          </div>
+        </div>
+        <div class="fld" style="margin-top:14px">
+          <label>Days available</label>
+          <div class="days" id="days"></div>
+        </div>
+        <div class="submit">
+          <button type="submit" class="primary" id="submitBtn">Add to list</button>
+          <span class="ok" id="okmsg" style="display:none">Added — thank you! 🎉</span>
+        </div>
+      </form>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="sec">
+      <h2>Best days at a glance</h2>
+      <div class="legend" id="legend"></div>
+      <div class="cal" id="cal"></div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="sec">
+      <h2>Everyone who's interested (<span id="count">0</span>)</h2>
+      <div id="tableWrap"></div>
+      <div class="src" id="src"></div>
+    </div>
+  </main>
+
+  <footer class="wrap">
+    Alpha School · New York City — Chess Club interest. Questions? <a href="https://chat.whatsapp.com/CGaclAvdIts4Y4ELGJW9E3" target="_blank" rel="noopener noreferrer">Parents WhatsApp</a>.
+  </footer>
+
+<script>
+/* ─────────────────────────────────────────────────────────────────────────
+   STORAGE — to collect responses from ALL parents (not just this device),
+   set STORE_URL to a JSON endpoint that answers GET -> {"responses":[...]}
+   and accepts PUT of the whole {"responses":[...]} object. Until then it
+   uses this browser's localStorage so the page is fully usable/testable.
+   ───────────────────────────────────────────────────────────────────────── */
+var STORE_URL = ""; // e.g. a jsonblob / KV / serverless URL
+var LS_KEY = "anyc-chess-interest-v1";
+var SHARED = !!STORE_URL;
+
+var DAYS = ["Mon","Tue","Wed","Thu","Fri"];
+var LEVELS = ["LL","L1","L2","L3","L4","L5"];
+var COLORS = { LL:"#8b5cf6", L1:"#1e6bff", L2:"#0ea5a4", L3:"#22a06b", L4:"#f2820a", L5:"#e0455f" };
+
+var responses = [];
+var $ = function(id){ return document.getElementById(id); };
+
+/* build day checkboxes + legend */
+DAYS.forEach(function(d){
+  var l = document.createElement("label"); l.className = "day-chip";
+  l.innerHTML = '<input type="checkbox" value="'+d+'"><span>'+d+'</span>';
+  $("days").appendChild(l);
+});
+LEVELS.forEach(function(lv){
+  var s = document.createElement("span"); s.className = "lv";
+  s.innerHTML = '<span class="dot" style="background:'+COLORS[lv]+'"></span>'+lv;
+  $("legend").appendChild(s);
+});
+
+function initials(name){
+  var p = (name||"").trim().split(/\s+/);
+  var a = (p[0]||"").charAt(0);
+  var b = p.length>1 ? p[p.length-1].charAt(0) : "";
+  return (a+b).toUpperCase() || "?";
+}
+
+async function load(){
+  if(SHARED){
+    try{
+      var r = await fetch(STORE_URL, {cache:"no-store"});
+      var j = await r.json();
+      responses = Array.isArray(j.responses) ? j.responses : [];
+    }catch(e){ responses = []; }
+  } else {
+    try{ responses = JSON.parse(localStorage.getItem(LS_KEY) || "[]"); }
+    catch(e){ responses = []; }
+  }
+}
+
+async function persist(){
+  if(SHARED){
+    // read-modify-write the whole doc
+    await fetch(STORE_URL, {
+      method:"PUT", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ club:"chess", responses: responses })
+    });
+  } else {
+    localStorage.setItem(LS_KEY, JSON.stringify(responses));
+  }
+}
+
+function render(){
+  // calendar
+  var cal = $("cal"); cal.innerHTML = "";
+  DAYS.forEach(function(d){
+    var kids = responses.filter(function(r){ return (r.days||[]).indexOf(d) > -1; });
+    var col = document.createElement("div"); col.className = "col";
+    var circles = kids.map(function(r){
+      return '<span class="kid" title="'+escapeAttr(r.name)+' · '+r.level+'" '
+        + 'style="background:'+(COLORS[r.level]||"#7f93a6")+'">'+initials(r.name)+'</span>';
+    }).join("");
+    col.innerHTML = '<h3>'+d+'</h3><span class="cnt">'+kids.length+(kids.length===1?" kid":" kids")+'</span>'
+      + (kids.length ? '<div class="circles">'+circles+'</div>' : '<span class="empty">—</span>');
+    cal.appendChild(col);
+  });
+
+  // table
+  $("count").textContent = responses.length;
+  var wrap = $("tableWrap");
+  if(!responses.length){
+    wrap.innerHTML = '<div class="muted-empty">No one yet — be the first to add your child above.</div>';
+  } else {
+    var rows = responses.map(function(r, i){
+      var days = DAYS.filter(function(d){ return (r.days||[]).indexOf(d)>-1; }).join(" · ") || "—";
+      return '<tr>'
+        + '<td>'+escapeHtml(r.name)+'</td>'
+        + '<td><span class="lvtag"><span class="dot" style="background:'+(COLORS[r.level]||"#7f93a6")+'"></span>'+escapeHtml(r.level)+'</span></td>'
+        + '<td class="daylist">'+days+'</td>'
+        + '<td style="text-align:right"><button class="del" title="Remove" data-i="'+i+'">✕</button></td>'
+        + '</tr>';
+    }).join("");
+    wrap.innerHTML = '<table><thead><tr><th>Name</th><th>Level</th><th>Days available</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
+    wrap.querySelectorAll(".del").forEach(function(b){
+      b.addEventListener("click", async function(){
+        var i = +b.getAttribute("data-i");
+        responses.splice(i,1);
+        await persist(); render();
+      });
+    });
+  }
+
+  $("src").textContent = SHARED
+    ? "Shared list — visible to all parents who open this page."
+    : "Saved on this device only. A shared list (all parents) can be turned on — ask the admin.";
+}
+
+function escapeHtml(s){ return String(s||"").replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function escapeAttr(s){ return escapeHtml(s).replace(/'/g,"&#39;"); }
+
+$("form").addEventListener("submit", async function(e){
+  e.preventDefault();
+  var name = $("name").value.trim();
+  var level = $("level").value;
+  var days = Array.prototype.slice.call(document.querySelectorAll('#days input:checked')).map(function(c){ return c.value; });
+  if(!name || !level || !days.length){
+    if(!days.length) alert("Pick at least one day your child is available.");
+    return;
+  }
+  $("submitBtn").disabled = true;
+  responses.push({ name:name, level:level, days:days, at:Date.now() });
+  try{ await persist(); }catch(err){ /* keep local copy regardless */ }
+  render();
+  // reset
+  $("form").reset();
+  document.querySelectorAll('#days input:checked').forEach(function(c){ c.checked=false; });
+  $("submitBtn").disabled = false;
+  var ok = $("okmsg"); ok.style.display="inline"; setTimeout(function(){ ok.style.display="none"; }, 2600);
+  $("name").focus();
+});
+
+(async function(){ await load(); render(); })();
+</script>
+</body>
+</html>

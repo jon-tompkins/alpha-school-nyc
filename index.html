@@ -65,6 +65,7 @@
   .t-comm{background:#fff2e6;color:#f2820a}.t-after{background:#ffeef0;color:#f0455f}
   .t-fam{background:#e6f6fb;color:#0a97c4}.t-lunch{background:#eef7e6;color:#4e9f2f}.t-work{background:#eef0ff;color:#5b63e6}
   .t-portal{background:#e6f6f2;color:#0f9488}.t-events{background:#fdecef;color:#d23a5e}
+  .t-chess{background:#eef0f4;color:#334155}
 
   footer{padding:30px 0 46px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7}
   footer .rule{height:1px;background:var(--line);margin:0 0 22px}
@@ -178,6 +179,16 @@
       </div>
 
     </div>
+
+    <div class="eyebrow" style="margin-top:34px">Club interest forms</div>
+    <div class="grid">
+      <a class="card" href="clubs/chess/">
+        <div class="ic t-chess">♟️</div>
+        <h2>Chess Club</h2>
+        <p>Interested? Add your child, their level, and the days they're available — and see who else is in.</p>
+        <span class="go">Open form <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
   </main>
 
   <footer class="wrap">
@@ -193,7 +204,7 @@
   var day=new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'}); // YYYY-MM-DD (NYC)
   function bump(k){ try{ fetch(API+k,{mode:'cors',keepalive:true}).catch(function(){});}catch(e){} }
   bump('views-all'); bump('views-'+day);
-  var MAP=[['events/','events'],['contacts/','contacts'],['calendars/','calendar'],['2026-2027-Calendar','calendar'],['greentop.farm','lunch'],
+  var MAP=[['clubs/chess','chess'],['events/','events'],['contacts/','contacts'],['calendars/','calendar'],['2026-2027-Calendar','calendar'],['greentop.farm','lunch'],
     ['loom.com','timeback'],['1GHwpbE9','timeback'],['timeback','timeback'],
     ['13S6sL1m','workshops'],['alpha-campus-nine','workshops'],['fsenrollment','parentportal'],
     ['whatsapp','whatsapp'],['canva','guides'],['community.alpha.school','community'],['experiences.school','afterschool'],
