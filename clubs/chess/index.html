@@ -91,7 +91,7 @@
         <a class="back" href="/">← Parent Hub</a>
       </div>
       <h1 class="htitle"><span>♟️</span> Chess Club — Interest</h1>
-      <p class="tag">Tell us your child's level and which days they could come. See who's in and which days work best below.</p>
+      <p class="tag">Tell us your child's grade and which days they could come. See who's in and which days work best below.</p>
     </div>
   </header>
 
@@ -106,15 +106,13 @@
             <input id="name" type="text" placeholder="e.g. Alex R." maxlength="40" required>
           </div>
           <div class="fld" style="max-width:200px">
-            <label for="level">Level</label>
+            <label for="level">Grade</label>
             <select id="level" required>
               <option value="" disabled selected>Select…</option>
               <option value="LL">LL</option>
               <option value="L1">L1</option>
               <option value="L2">L2</option>
-              <option value="L3">L3</option>
-              <option value="L4">L4</option>
-              <option value="L5">L5</option>
+              <option value="M">M</option>
             </select>
           </div>
         </div>
@@ -160,8 +158,8 @@ var LS_KEY = "anyc-chess-interest-v1";
 var SHARED = !!STORE_URL;
 
 var DAYS = ["Mon","Tue","Wed","Thu","Fri"];
-var LEVELS = ["LL","L1","L2","L3","L4","L5"];
-var COLORS = { LL:"#8b5cf6", L1:"#1e6bff", L2:"#0ea5a4", L3:"#22a06b", L4:"#f2820a", L5:"#e0455f" };
+var LEVELS = ["LL","L1","L2","M"];
+var COLORS = { LL:"#8b5cf6", L1:"#1e6bff", L2:"#0ea5a4", M:"#f2820a" };
 
 var responses = [];
 var $ = function(id){ return document.getElementById(id); };
@@ -240,7 +238,7 @@ function render(){
         + '<td style="text-align:right"><button class="del" title="Remove" data-i="'+i+'">✕</button></td>'
         + '</tr>';
     }).join("");
-    wrap.innerHTML = '<table><thead><tr><th>Name</th><th>Level</th><th>Days available</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
+    wrap.innerHTML = '<table><thead><tr><th>Name</th><th>Grade</th><th>Days available</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
     wrap.querySelectorAll(".del").forEach(function(b){
       b.addEventListener("click", async function(){
         var i = +b.getAttribute("data-i");
