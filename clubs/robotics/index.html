@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chess Club Interest · Alpha School NYC</title>
-<meta name="description" content="Sign up interest for the Alpha School NYC chess club — add your child, their level, and the days they're available.">
+<title>Robotics Club Interest · Alpha School NYC</title>
+<meta name="description" content="Sign up interest for the Alpha School NYC robotics club — add your child, their level, and the days they're available.">
 <meta name="theme-color" content="#0a2540">
 <script>(function(){try{fetch("/version.json?_="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){var k="anyc_v",s=localStorage.getItem(k);if(s&&s!==j.v){localStorage.setItem(k,j.v);location.reload()}else localStorage.setItem(k,j.v)}).catch(function(){})}catch(e){}})();</script>
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -90,7 +90,7 @@
         <a href="/" aria-label="Alpha School NYC Parent Hub" style="display:inline-flex"><img src="/assets/alpha-white.svg" alt="Alpha School"></a>
         <a class="back" href="/">← Parent Hub</a>
       </div>
-      <h1 class="htitle"><span>♟️</span> Chess Club — Interest</h1>
+      <h1 class="htitle"><span>🤖</span> Robotics Club — Interest</h1>
       <p class="tag">Tell us your child's grade and which days they could come. See who's in and which days work best below.</p>
     </div>
   </header>
@@ -143,7 +143,7 @@
   </main>
 
   <footer class="wrap">
-    Alpha School · New York City — Chess Club interest. Questions? <a href="https://chat.whatsapp.com/CGaclAvdIts4Y4ELGJW9E3" target="_blank" rel="noopener noreferrer">Parents WhatsApp</a>.
+    Alpha School · New York City — Robotics Club interest. Questions? <a href="https://chat.whatsapp.com/CGaclAvdIts4Y4ELGJW9E3" target="_blank" rel="noopener noreferrer">Parents WhatsApp</a>.
   </footer>
 
 <script>
@@ -153,8 +153,8 @@
    and accepts PUT of the whole {"responses":[...]} object. Until then it
    uses this browser's localStorage so the page is fully usable/testable.
    ───────────────────────────────────────────────────────────────────────── */
-var STORE_URL = "https://www.myjunto.xyz/api/clubs/chess?club=chess"; // shared store (junto KV endpoint)
-var LS_KEY = "anyc-chess-interest-v1";
+var STORE_URL = "https://www.myjunto.xyz/api/clubs/chess?club=robotics"; // shared store (junto KV endpoint)
+var LS_KEY = "anyc-robotics-interest-v1";
 var SHARED = !!STORE_URL;
 
 var DAYS = ["Mon","Tue","Wed","Thu","Fri"];
@@ -193,7 +193,7 @@ async function apiGet(){
   return Array.isArray(j) ? j : (Array.isArray(j.responses) ? j.responses : []);
 }
 async function apiPut(list){
-  await fetch(STORE_URL, { method:"PUT", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ club:"chess", responses: list }) });
+  await fetch(STORE_URL, { method:"PUT", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ club:"robotics", responses: list }) });
 }
 function saveLocal(){ localStorage.setItem(LS_KEY, JSON.stringify(responses)); }
 
