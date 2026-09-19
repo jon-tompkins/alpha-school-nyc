@@ -186,16 +186,14 @@ function initials(name){
 function ensureIds(){
   responses.forEach(function(r){ if(!r.id) r.id = (r.at||Date.now()) + "-" + Math.random().toString(36).slice(2,6); });
 }
+// jsonblob (and any bin that stores a whole JSON doc): GET the doc, PUT it back.
 async function apiGet(){
   var r = await fetch(STORE_URL, {cache:"no-store"});
   var j = await r.json();
-  return Array.isArray(j.responses) ? j.responses : [];
+  return Array.isArray(j) ? j : (Array.isArray(j.responses) ? j.responses : []);
 }
-// POST as text/plain to avoid a CORS preflight against the Apps Script web app.
-async function apiPost(payload){
-  var r = await fetch(STORE_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) });
-  var j = await r.json();
-  return Array.isArray(j.responses) ? j.responses : null;
+async function apiPut(list){
+  await fetch(STORE_URL, { method:"PUT", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ club:"chess", responses: list }) });
 }
 function saveLocal(){ localStorage.setItem(LS_KEY, JSON.stringify(responses)); }
 
@@ -204,16 +202,17 @@ async function load(){
   else { try{ responses = JSON.parse(localStorage.getItem(LS_KEY) || "[]"); }catch(e){ responses = []; } }
   ensureIds();
 }
+// Read-modify-write the whole doc so concurrent parents don't clobber each other.
 async function addRecord(rec){
   if(SHARED){
-    var upd = await apiPost({ action:"add", record: rec });
-    if(upd){ responses = upd; ensureIds(); } else { responses.push(rec); } // optimistic on failure
+    try{ var latest = await apiGet(); latest.push(rec); await apiPut(latest); responses = latest; ensureIds(); }
+    catch(e){ responses.push(rec); }
   } else { responses.push(rec); saveLocal(); }
 }
 async function deleteRecord(id){
   if(SHARED){
-    var upd = await apiPost({ action:"delete", id: id });
-    if(upd){ responses = upd; ensureIds(); } else { responses = responses.filter(function(r){ return r.id !== id; }); }
+    try{ var latest = await apiGet(); latest = latest.filter(function(r){ return r.id !== id; }); await apiPut(latest); responses = latest; ensureIds(); }
+    catch(e){ responses = responses.filter(function(r){ return r.id !== id; }); }
   } else { responses = responses.filter(function(r){ return r.id !== id; }); saveLocal(); }
 }
 
