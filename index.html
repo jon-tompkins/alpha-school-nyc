@@ -58,7 +58,14 @@
   .card.multi .links a svg{margin-left:auto;transition:transform .16s ease}
   .card.multi .links a:hover svg{transform:translate(3px,-3px)}
   .card .codechip{display:inline-block;margin-top:4px;font-size:12px;background:#fff5e8;border:1px solid #f4d9b0;color:#a86412;padding:6px 9px;border-radius:8px;line-height:1.5}
+  .card .codechip.sm{font-size:10.5px;padding:3px 7px;margin-top:6px;line-height:1.4}
   .card .codechip b{color:#7a4708;letter-spacing:.02em}
+  /* compact chip grid (schedule) */
+  .card.multi .chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+  .card.multi .chips a{display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;
+    color:var(--accent);background:var(--accent-soft);border:1px solid #d7e5ff;border-radius:10px;padding:12px 0;
+    transition:background .16s ease,transform .16s ease}
+  .card.multi .chips a:hover{background:#dbe8ff;transform:translateY(-1px)}
   /* per-card icon tints */
   .t-cal{background:#eaf1ff;color:#1e6bff}.t-time{background:#e9f8ef;color:#12a150}
   .t-wa{background:#e7f9ef;color:#1fae5a}.t-guide{background:#f3ecff;color:#7b4dff}
@@ -89,29 +96,27 @@
     <div class="eyebrow">Quick links</div>
     <div class="grid">
 
-      <a class="card" href="events/">
+      <div class="card multi">
         <div class="ic t-events">📆</div>
-        <h2>Events &amp; Key Dates</h2>
-        <p>Browse what's coming up — and add any event straight to your own calendar.</p>
-        <span class="go">Open events <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-
-      <a class="card" href="https://alpha.school/wp-content/uploads/calendars/2026_27/2026-2027-Calendar-New-York.pdf" target="_blank" rel="noopener noreferrer">
-        <div class="ic t-cal">📅</div>
-        <h2>School Calendar</h2>
-        <p>The 2026–2027 NYC academic calendar — key dates, breaks, and holidays (PDF).</p>
-        <span class="go">Open calendar <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
-      </a>
+        <h2>Events &amp; Calendar</h2>
+        <p>What's coming up — add events straight to your own calendar — plus the full 2026–2027 academic calendar.</p>
+        <div class="links">
+          <a href="events/">Events &amp; Key Dates <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="https://alpha.school/wp-content/uploads/calendars/2026_27/2026-2027-Calendar-New-York.pdf" target="_blank" rel="noopener noreferrer">School Calendar (PDF) <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+        </div>
+      </div>
 
       <div class="card multi">
         <div class="ic t-work">🗓️</div>
         <h2>Schedule</h2>
         <p>Daily class schedules by level.</p>
-        <div class="links">
-          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=l1" target="_blank" rel="noopener noreferrer">Level 1 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=l2" target="_blank" rel="noopener noreferrer">Level 2 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=ms" target="_blank" rel="noopener noreferrer">Middle School <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
-          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=hs" target="_blank" rel="noopener noreferrer">High School <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+        <div class="chips">
+          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=wl" target="_blank" rel="noopener noreferrer" title="Wonder Lab">WL</a>
+          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=ll" target="_blank" rel="noopener noreferrer" title="Learning Lab">LL</a>
+          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=l1" target="_blank" rel="noopener noreferrer" title="Level 1">L1</a>
+          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=l2" target="_blank" rel="noopener noreferrer" title="Level 2">L2</a>
+          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=ms" target="_blank" rel="noopener noreferrer" title="Middle School">M</a>
+          <a href="https://alpha-campus-nine.vercel.app/nyc/schedule?level=hs" target="_blank" rel="noopener noreferrer" title="High School">H</a>
         </div>
       </div>
 
@@ -134,10 +139,11 @@
       </div>
 
       <div class="card multi">
-        <div class="ic t-portal">🗂️</div>
-        <h2>Portals</h2>
-        <p>Parent Portal (forms, invoices, tuition — no autopay, each invoice is paid manually) and the wider Alpha Community Portal.</p>
+        <div class="ic t-wa">💬</div>
+        <h2>Communication</h2>
+        <p>The parents WhatsApp group, the Parent Portal (forms, invoices, tuition — no autopay), and the wider Alpha Community Portal.</p>
         <div class="links">
+          <a href="https://chat.whatsapp.com/CGaclAvdIts4Y4ELGJW9E3" target="_blank" rel="noopener noreferrer">Parents WhatsApp <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
           <a href="https://alpha-anywhere-center.fsenrollment.com/portal" target="_blank" rel="noopener noreferrer">Parent Portal <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
           <a href="https://community.alpha.school/" target="_blank" rel="noopener noreferrer">Community Portal <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
         </div>
@@ -145,28 +151,15 @@
 
       <div class="card multi">
         <div class="ic t-work">🗓️</div>
-        <h2>Workshops</h2>
-        <p>Workshop schedules, plus the "I can" skill check-charts by grade.</p>
+        <h2>Workshops &amp; Programs</h2>
+        <p>Workshop schedules, the "I can" skill check-charts, and after-school enrichment beyond the classroom.</p>
         <div class="links">
           <a href="https://alpha-campus-nine.vercel.app/nyc/workshops" target="_blank" rel="noopener noreferrer">Workshops hub <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
           <a href="https://docs.google.com/spreadsheets/d/13S6sL1mOkDflfoj43kCcJiZ47iBBKonxHcfSkYJg1A4/edit" target="_blank" rel="noopener noreferrer">Check Charts by Grade <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+          <a href="https://alpha.experiences.school/" target="_blank" rel="noopener noreferrer">After-School Programs <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
         </div>
+        <span class="codechip sm">After-school code <b>AlphaNewYork2026</b> · re-type if it fails (stray spaces)</span>
       </div>
-
-      <a class="card" href="https://chat.whatsapp.com/CGaclAvdIts4Y4ELGJW9E3" target="_blank" rel="noopener noreferrer">
-        <div class="ic t-wa">💬</div>
-        <h2>Parents WhatsApp</h2>
-        <p>Join the NYC parents group chat to connect, ask questions, and stay in the loop.</p>
-        <span class="go">Join the group <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
-      </a>
-
-      <a class="card" href="https://alpha.experiences.school/" target="_blank" rel="noopener noreferrer">
-        <div class="ic t-after">🎨</div>
-        <h2>After-School Programs</h2>
-        <p>Enrichment, clubs, and activities beyond the classroom.</p>
-        <span class="codechip">Campus code <b>AlphaNewYork2026</b>. If it doesn't go through, try re-typing it — a stray space is the usual culprit.</span>
-        <span class="go">Browse programs <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
-      </a>
 
       <div class="card multi">
         <div class="ic t-fam">📗</div>
