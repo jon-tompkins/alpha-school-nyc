@@ -91,7 +91,7 @@ function describe(e) {
   const g = (e.groups || []).join(", ");
   if (g && g !== "All") parts.push(`For: ${g}`);
   if (e.notes) parts.push(e.notes);
-  if (e.url) parts.push(e.url);
+  if (e.url) parts.push(`Details / post: ${e.url}`);
   return parts.join("\n");
 }
 
