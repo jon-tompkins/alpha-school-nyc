@@ -66,6 +66,9 @@ window.EVENTS = [
   { title:"Spring MAP Retesting", date:"2027-05-24", end:"2027-05-28", groups:["All"] },
   { title:"No School / Memorial Day", date:"2027-05-31", groups:["All"] },
   { title:"Last Day / Session 5 Ends / Dismissal at 12 Noon", date:"2027-06-18", groups:["All"] },
+
+  // ── From parent emails (auto-ingested, Jon-approved) ──
+  { title:"Picture Day", date:"2026-10-07", groups:["L1","L2","MS","HS"], notes:"Picture day for L1, L2, Middle School, and High School. Source: Terrence via Alpha Community." },
 ];
 
 // Announced but not yet dated — shown in a "Still to be scheduled" note on the page.
