@@ -22,6 +22,11 @@
   .brandline img{height:30px}
   .htitle{margin-top:14px;font-size:25px;font-weight:750;letter-spacing:-.02em;color:#fff}
   .tag{margin-top:7px;font-size:14px;color:#c7d7ea}
+  .subscribe{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+  .subscribe .sbtn{font-size:13px;font-weight:650;border-radius:9px;padding:9px 13px;cursor:pointer;border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.12);color:#fff;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+  .subscribe .sbtn:hover{background:rgba(255,255,255,.22)}
+  .subscribe .sbtn.primary{background:#fff;color:var(--navy);border-color:#fff}
+  .subnote{font-size:12px;color:#aac2dd;margin-top:9px;max-width:60ch}
   main{padding:22px 0 60px}
   /* toolbar */
   .bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
@@ -72,7 +77,13 @@
       <a class="back" href="../">← Back to Parent Hub</a>
       <div class="brandline"><a href="../" aria-label="Parent Hub home" style="display:inline-flex"><img src="../assets/alpha-white.svg" alt="Alpha School"></a></div>
       <h1 class="htitle">Events &amp; Key Dates</h1>
-      <p class="tag">Browse what's coming up. Tap any event to add it to your own calendar.</p>
+      <p class="tag">Browse what's coming up. Subscribe once to get every event in your own calendar — or tap any single event below to add it.</p>
+      <div class="subscribe">
+        <a class="sbtn primary" href="https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Falphanycparents.xyz%2Fevents%2Falpha.ics" target="_blank" rel="noopener">➕ Add to Google Calendar</a>
+        <a class="sbtn" href="webcal://alphanycparents.xyz/events/alpha.ics">🍎 Apple / Outlook</a>
+        <button class="sbtn" id="copyics" type="button">🔗 Copy feed link</button>
+      </div>
+      <p class="subnote">Subscribing keeps your calendar updated automatically as new events are added. (Apple refreshes within minutes; Google refreshes subscribed feeds every few hours.)</p>
     </div>
   </header>
 
@@ -192,6 +203,16 @@
       : e.date.replace(/-/g,'')+'T'+e.start.replace(':','')+'00/'+(e.end||e.date).replace(/-/g,'')+'T'+((e.finish||e.start).replace(':',''))+'00';
     return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title)+'&dates='+dates+(e.location?'&location='+encodeURIComponent(e.location):'')+(e.notes?'&details='+encodeURIComponent(e.notes):'');
   }
+  // Subscribe: copy the raw ICS feed URL
+  document.addEventListener('click',function(e){
+    if(e.target&&e.target.id==='copyics'){
+      const url='https://alphanycparents.xyz/events/alpha.ics';
+      navigator.clipboard.writeText(url).then(function(){
+        const b=e.target, t=b.textContent; b.textContent='✓ Copied!';
+        setTimeout(function(){ b.textContent=t; },1800);
+      }).catch(function(){ prompt('Copy this calendar feed link:',url); });
+    }
+  });
   // load event data fresh each visit (cache-busted so saved/home-screen users always get new events)
   (function(){ var s=document.createElement('script'); s.src='events.js?t='+Math.floor(Date.now()/60000);
     s.onload=init; s.onerror=function(){ app.innerHTML='<div class="empty">Couldn\'t load events — please refresh.</div>'; };
