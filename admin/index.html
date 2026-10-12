@@ -106,7 +106,13 @@
         <div class="secbody" id="body-clicks"><div id="clicksList"><div class="loading">loading…</div></div></div>
       </div>
       <div class="sec" id="sec-traffic">
-        <div class="sechead" data-body="body-traffic"><span class="chev">▾</span><h3>Site visits · last 5 days</h3></div>
+        <div class="sechead" data-body="body-traffic"><span class="chev">▾</span><h3 id="trafficTitle">Site visits · last 5 days</h3><span class="sp"></span>
+          <div class="seg" id="trafficSeg">
+            <button type="button" data-view="day" class="on">Daily</button>
+            <button type="button" data-view="week">Weekly</button>
+            <button type="button" data-view="month">Monthly</button>
+          </div>
+        </div>
         <div class="secbody" id="body-traffic"><div id="traffic"><div class="loading">loading…</div></div></div>
       </div>
       <div class="note">Counts are collected with a lightweight cookie-free counter (no personal data). This admin page is gated in the browser only — a soft gate, not strong security.</div>
@@ -180,15 +186,87 @@
     // clicks by item — stash both series, render active mode
     G.all=iAll; G.today=iToday;
     renderClicks();
-    // 14-day traffic
-    const max=Math.max.apply(null,dly.concat([1]));
-    $('traffic').innerHTML='<div class="chart">'+days.map((d,i)=>{
-      const h=Math.round((dly[i]/max)*100);
-      const lbl=d.slice(5).replace('-','/');
-      return '<div class="col"><div class="v">'+(dly[i]||'')+'</div><div class="b" style="height:'+h+'%"></div><div class="d">'+lbl+'</div></div>';
-    }).join('')+'</div>';
+    // site visits — keep the 5 daily values, then draw whichever view is selected
+    days.forEach((d,i)=>{ T.day[d]=dly[i]; });
+    T.last5=days;
+    renderTraffic();
     $('updated').textContent='updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   }
+  // ---- Site visits: Daily / Weekly / Monthly ----
+  // Only per-day counters exist historically, so weeks and months are summed from days.
+  // Finished days never change, so they are cached in this browser; today is always re-read.
+  // From Nov 2026 on, the site also keeps a per-month counter, read directly.
+  const START='2026-09-15';           // first day the site counted visits
+  const MONTH_COUNTER_FROM='2026-11'; // first month with a complete views-mo-YYYY-MM counter
+  const DKEY='alphanyc_admin_days_v1';
+  const T={view:'day',day:{},last5:[],busy:false};
+  const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function dayCache(){ try{ return JSON.parse(localStorage.getItem(DKEY)||'{}'); }catch(e){ return {}; } }
+  function addDays(iso,n){ const d=new Date(iso+'T12:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+  function dow(iso){ return new Date(iso+'T12:00:00Z').getUTCDay(); }               // 0=Sun
+  function weekStart(iso){ return addDays(iso,-((dow(iso)+6)%7)); }                 // Monday
+  function md(iso){ return (+iso.slice(5,7))+'/'+(+iso.slice(8,10)); }
+  function bars(items){
+    const max=Math.max.apply(null,items.map(x=>x.n||0).concat([1]));
+    return '<div class="chart">'+items.map(x=>'<div class="col"><div class="v">'+(x.n==null?'…':(x.n||''))+'</div><div class="b" style="height:'+Math.round(((x.n||0)/max)*100)+'%"></div><div class="d">'+x.l+'</div></div>').join('')+'</div>';
+  }
+  // read every day in [from..to] that we don't have yet, a few at a time (counter service allows 30 reads / 10s)
+  async function ensureDays(from,to,onProgress){
+    const today=nyDay(0), cache=dayCache(), need=[];
+    for(let d=from; d<=to; d=addDays(d,1)){
+      if(d<START || d>today) continue;
+      if(T.day[d]!=null) continue;
+      if(d<today && cache[d]!=null){ T.day[d]=cache[d]; continue; }
+      need.push(d);
+    }
+    for(let i=0;i<need.length;i+=6){
+      const part=need.slice(i,i+6);
+      const vals=await Promise.all(part.map(d=>val('views-'+d)));
+      part.forEach((d,k)=>{ if(vals[k]>=0){ T.day[d]=vals[k]; if(d<today) cache[d]=vals[k]; } });
+      try{ localStorage.setItem(DKEY,JSON.stringify(cache)); }catch(e){}
+      if(onProgress) onProgress(Math.min(i+6,need.length),need.length);
+      if(i+6<need.length) await sleep(2200);
+    }
+  }
+  function sumDays(from,to){ let n=0; for(let d=from; d<=to; d=addDays(d,1)) n+=(T.day[d]||0); return n; }
+  async function renderTraffic(){
+    const today=nyDay(0), box=$('traffic'), title=$('trafficTitle');
+    if(T.view==='day'){
+      title.textContent='Site visits · last 5 days';
+      box.innerHTML=bars(T.last5.map(d=>({l:d.slice(5).replace('-','/'),n:T.day[d]||0})));
+      return;
+    }
+    if(T.busy) return; T.busy=true;
+    const view=T.view;
+    const prog=(a,b)=>{ if(T.view===view) box.innerHTML='<div class="loading">Adding up daily counts… '+a+' of '+b+' days</div>'; };
+    box.innerHTML='<div class="loading">loading…</div>';
+    try{
+      if(view==='week'){
+        title.textContent='Site visits · by week (Mon–Sun)';
+        const thisWk=weekStart(today); let first=addDays(thisWk,-7*7); const startWk=weekStart(START);
+        if(first<startWk) first=startWk;
+        await ensureDays(first,today,prog);
+        const items=[]; for(let w=first; w<=thisWk; w=addDays(w,7)) items.push({l:md(w)+(w===thisWk?'*':''),n:sumDays(w,addDays(w,6))});
+        if(T.view===view) box.innerHTML=bars(items)+'<div class="note" style="text-align:left">Label is the Monday each week starts. * = this week so far.</div>';
+      } else {
+        title.textContent='Site visits · by month';
+        const months=[]; let y=+today.slice(0,4), m=+today.slice(5,7);
+        for(let i=0;i<6;i++){ const k=y+'-'+String(m).padStart(2,'0'); if(k>=START.slice(0,7)) months.unshift(k); m--; if(m===0){m=12;y--;} }
+        const fromDays=months.filter(k=>k<MONTH_COUNTER_FROM), fromCounter=months.filter(k=>k>=MONTH_COUNTER_FROM);
+        const out={};
+        if(fromDays.length){
+          const last=fromDays[fromDays.length-1]; const [ly,lm]=last.split('-').map(Number);
+          const lastDay=new Date(Date.UTC(ly,lm,0)).toISOString().slice(0,10);
+          await ensureDays(fromDays[0]+'-01',lastDay<today?lastDay:today,prog);
+          fromDays.forEach(k=>{ const [ky,km]=k.split('-').map(Number); out[k]=sumDays(k+'-01',new Date(Date.UTC(ky,km,0)).toISOString().slice(0,10)); });
+        }
+        if(fromCounter.length){ const v=await Promise.all(fromCounter.map(k=>val('views-mo-'+k))); fromCounter.forEach((k,i)=>{ out[k]=v[i]<0?0:v[i]; }); }
+        const cur=today.slice(0,7);
+        if(T.view===view) box.innerHTML=bars(months.map(k=>({l:MON[+k.slice(5,7)-1]+(k===cur?'*':''),n:out[k]})))+'<div class="note" style="text-align:left">* = this month so far. Counting started Sep 15, 2026.</div>';
+      }
+    } finally { T.busy=false; if(T.view!==view) renderTraffic(); }
+  }
+
   function tile(lab,v,small){ return '<div class="tile"><div class="lab">'+lab+'</div><div class="val">'+(small?'<span style="font-size:16px">'+v+'</span>':fmt(v))+'</div></div>'; }
   function fmt(n){ return (typeof n==='number')? n.toLocaleString('en-US') : n; }
   function renderBars(id,rows){
@@ -209,6 +287,14 @@
     G.mode=b.dataset.mode;
     $('clicksSeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
     renderClicks();
+  });
+
+  // Daily / Weekly / Monthly toggle for site visits
+  $('trafficSeg').addEventListener('click',e=>{
+    const b=e.target.closest('button[data-view]'); if(!b) return;
+    T.view=b.dataset.view;
+    $('trafficSeg').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+    renderTraffic();
   });
 
   // auto-unlock if this browser already authenticated this session
