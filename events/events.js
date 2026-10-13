@@ -82,6 +82,7 @@ window.EVENTS = [
   { title:"I Want My Hat Back, The Musical! — Family Performance", date:"2026-12-16", groups:["All"], notes:"Family performance of the winter musical. Time to be announced. Also Dec 17. Source: This Week at Alpha NYC, Issue No. 5." },
   { title:"I Want My Hat Back, The Musical! — Family Performance", date:"2026-12-17", groups:["All"], notes:"Family performance of the winter musical. Time to be announced. Also Dec 16. Source: This Week at Alpha NYC, Issue No. 5." },
   { title:"Alpha NYC Musical — Interest Meeting", date:"2026-10-09", start:"15:30", finish:"16:00", groups:["All"], notes:"Interest meeting only — attending doesn't commit you, and students who can't make it can still participate. Pick up at 4pm.", url:"https://www.community.alpha.school/community/post/cp-1c4182b6-db42-49e8-bcde-0c12ea3a9fa0" },
+  { title:"L1 Showcase", date:"2026-10-29", start:"16:00", finish:"17:30", location:"180 Maiden Lane, 6th floor", groups:["L1"], notes:"End of Session 1 Alpha Showcase. Moved from Oct 27 to Thursday, Oct 29. Students stay after school (no dismissal for pickup) — parents can just come at 4pm.", url:"https://www.community.alpha.school/community/post/cp-720ffcac-1416-410d-909b-4f33a795c5d5" },
 ];
 
 // Announced but not yet dated — shown in a "Still to be scheduled" note on the page.
