@@ -85,6 +85,7 @@ window.EVENTS = [
   { title:"L1 Showcase", date:"2026-10-29", start:"16:00", finish:"17:30", location:"180 Maiden Lane, 6th floor", groups:["L1"], notes:"End of Session 1 Alpha Showcase. Moved from Oct 27 to Thursday, Oct 29. Students stay after school (no dismissal for pickup) — parents can just come at 4pm.", url:"https://www.community.alpha.school/community/post/cp-720ffcac-1416-410d-909b-4f33a795c5d5" },
   { title:"Build Weekend New York (Day 1)", date:"2026-10-24", start:"10:00", finish:"20:00", location:"New York", groups:["All"], notes:"Free two-day AI app-building event for students ages 9-16, no coding experience needed; only 50 spots, apply to attend.", url:"https://headcount.events/events/build-weekend-new-york-2026-10" },
   { title:"Build Weekend New York (Day 2)", date:"2026-10-25", start:"10:00", finish:"18:00", location:"New York", groups:["All"], notes:"Free two-day AI app-building event for students ages 9-16, no coding experience needed; only 50 spots, apply to attend.", url:"https://headcount.events/events/build-weekend-new-york-2026-10" },
+  { title:"L1 Funday Monday", date:"2026-10-19", groups:["L1"], notes:"L1 students earned a Funday Monday reward for their effort this week; pictures and updates to be shared afterward.", url:"https://www.community.alpha.school/community/post/cp-1c7224d7-b276-4808-8c99-3f8eeb127c27" },
 ];
 
 // Announced but not yet dated — shown in a "Still to be scheduled" note on the page.
