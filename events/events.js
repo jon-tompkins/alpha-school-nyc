@@ -87,6 +87,7 @@ window.EVENTS = [
   { title:"Build Weekend New York (Day 2)", date:"2026-10-25", start:"10:00", finish:"18:00", location:"New York", groups:["All"], notes:"Free two-day AI app-building event for students ages 9-16, no coding experience needed; only 50 spots, apply to attend.", url:"https://headcount.events/events/build-weekend-new-york-2026-10" },
   { title:"L1 Funday Monday", date:"2026-10-19", groups:["L1"], notes:"L1 students earned a Funday Monday reward for their effort this week; pictures and updates to be shared afterward.", url:"https://www.community.alpha.school/community/post/cp-1c7224d7-b276-4808-8c99-3f8eeb127c27" },
   { title:"Winter Musical Sign-Up Deadline", date:"2026-10-17", groups:["LL", "L1", "L2", "MS"], notes:"Parents must fill out the sign-up form for kids to audition for I Want My Hat Back (The Musical). Rehearsals are Mon/Wed/Thu 3:30-5:00.", url:"https://tally.so/r/Y5LB0W" },
+  { title:"Early Learners move to 156 William Street", date:"2026-10-26", location:"156 William Street", groups:["WL"], notes:"Early Learners group moves from the 7th floor at Maiden Lane to 156 William Street; kids prepare the week before by moving lockers and taking short trips.", url:"https://www.community.alpha.school/community/post/cp-5f5d8ab9-8d65-4a35-8076-531ee8463005" },
 ];
 
 // Announced but not yet dated — shown in a "Still to be scheduled" note on the page.
