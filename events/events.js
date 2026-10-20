@@ -88,6 +88,7 @@ window.EVENTS = [
   { title:"L1 Funday Monday", date:"2026-10-19", groups:["L1"], notes:"L1 students earned a Funday Monday reward for their effort this week; pictures and updates to be shared afterward.", url:"https://www.community.alpha.school/community/post/cp-1c7224d7-b276-4808-8c99-3f8eeb127c27" },
   { title:"Winter Musical Sign-Up Deadline", date:"2026-10-17", groups:["LL", "L1", "L2", "MS"], notes:"Parents must fill out the sign-up form for kids to audition for I Want My Hat Back (The Musical). Rehearsals are Mon/Wed/Thu 3:30-5:00.", url:"https://tally.so/r/Y5LB0W" },
   { title:"Early Learners move to 156 William Street", date:"2026-10-26", location:"156 William Street", groups:["WL"], notes:"Early Learners group moves from the 7th floor at Maiden Lane to 156 William Street; kids prepare the week before by moving lockers and taking short trips.", url:"https://www.community.alpha.school/community/post/cp-5f5d8ab9-8d65-4a35-8076-531ee8463005" },
+  { title:"Halloween Costume Parade", date:"2026-10-30", groups:["All"], notes:"Students wear regular clothes and bring a labeled costume bag; they change near end of day for the campus parade. Masks only during parade; no toy weapons or fake blood. Costumes optional.", url:"https://www.community.alpha.school/community/post/cp-73bedd87-def9-46ef-b00b-285af7e846a4" },
 ];
 
 // Announced but not yet dated — shown in a "Still to be scheduled" note on the page.
