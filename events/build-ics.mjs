@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-/* Alpha NYC — build an iCalendar (.ics) feed from events.js.
-   Reads events/events.js (window.EVENTS), writes events/alpha.ics.
-   Parents subscribe to the hosted URL (https://alphanycparents.xyz/events/alpha.ics).
+/* Alpha NYC — build iCalendar (.ics) feeds from events.js.
+   Reads events/events.js (window.EVENTS), writes events/alpha.ics (all)
+   plus per-level feeds: alpha-wl.ics alpha-ll.ics alpha-l1.ics alpha-l2.ics alpha-ms.ics alpha-hs.ics
+   Each level feed includes "All" events + that level's events.
    All times are America/New_York. Run after any events.js change:  node events/build-ics.mjs
 */
 import { readFileSync, writeFileSync } from "node:fs";
@@ -11,7 +12,16 @@ import { dirname, join } from "node:path";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const SRC = join(here, "events.js");
-const OUT = join(here, "alpha.ics");
+
+const LEVELS = [
+  { key: "All",  file: "alpha",    label: "All Levels" },
+  { key: "WL",   file: "alpha-wl", label: "WonderLab (Pre-K/K)" },
+  { key: "LL",   file: "alpha-ll", label: "Learning Lab" },
+  { key: "L1",   file: "alpha-l1", label: "Level 1" },
+  { key: "L2",   file: "alpha-l2", label: "Level 2" },
+  { key: "MS",   file: "alpha-ms", label: "Middle School" },
+  { key: "HS",   file: "alpha-hs", label: "High School" },
+];
 
 // --- load events.js in a tiny sandbox ---
 const code = readFileSync(SRC, "utf8");
@@ -95,46 +105,55 @@ function describe(e) {
   return parts.join("\n");
 }
 
-const lines = [
-  "BEGIN:VCALENDAR",
-  "VERSION:2.0",
-  "PRODID:-//Alpha NYC Parents//Events//EN",
-  "CALSCALE:GREGORIAN",
-  "METHOD:PUBLISH",
-  "X-WR-CALNAME:Alpha NYC Parents",
-  "X-WR-TIMEZONE:America/New_York",
-  "REFRESH-INTERVAL;VALUE=DURATION:PT1H",
-  "X-PUBLISHED-TTL:PT1H",
-  ...VTZ,
-];
-
-const sorted = [...EVENTS].sort((a, b) =>
-  (a.date + (a.start || "")).localeCompare(b.date + (b.start || ""))
-);
-
-for (const e of sorted) {
-  if (!e.date || !e.title) continue;
-  lines.push("BEGIN:VEVENT");
-  lines.push(`UID:${uidFor(e)}`);
-  lines.push(`DTSTAMP:${DTSTAMP}`);
-  if (e.start) {
-    lines.push(`DTSTART;TZID=America/New_York:${ymd(e.date)}T${hms(e.start)}`);
-    const endt = e.finish ? hms(e.finish) : addHour(e.start);
-    lines.push(`DTEND;TZID=America/New_York:${ymd(e.date)}T${endt}`);
-  } else {
-    lines.push(`DTSTART;VALUE=DATE:${ymd(e.date)}`);
-    lines.push(`DTEND;VALUE=DATE:${plusOneDay(e.end || e.date)}`);
+function buildICS(events, calLabel) {
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Alpha NYC Parents//Events//EN",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    `X-WR-CALNAME:${calLabel}`,
+    "X-WR-TIMEZONE:America/New_York",
+    "REFRESH-INTERVAL;VALUE=DURATION:PT1H",
+    "X-PUBLISHED-TTL:PT1H",
+    ...VTZ,
+  ];
+  const sorted = [...events].sort((a, b) =>
+    (a.date + (a.start || "")).localeCompare(b.date + (b.start || ""))
+  );
+  for (const e of sorted) {
+    if (!e.date || !e.title) continue;
+    lines.push("BEGIN:VEVENT");
+    lines.push(`UID:${uidFor(e)}`);
+    lines.push(`DTSTAMP:${DTSTAMP}`);
+    if (e.start) {
+      lines.push(`DTSTART;TZID=America/New_York:${ymd(e.date)}T${hms(e.start)}`);
+      const endt = e.finish ? hms(e.finish) : addHour(e.start);
+      lines.push(`DTEND;TZID=America/New_York:${ymd(e.date)}T${endt}`);
+    } else {
+      lines.push(`DTSTART;VALUE=DATE:${ymd(e.date)}`);
+      lines.push(`DTEND;VALUE=DATE:${plusOneDay(e.end || e.date)}`);
+    }
+    lines.push(`SUMMARY:${esc(e.title)}`);
+    const desc = describe(e);
+    if (desc) lines.push(`DESCRIPTION:${esc(desc)}`);
+    if (e.location) lines.push(`LOCATION:${esc(e.location)}`);
+    lines.push("STATUS:CONFIRMED");
+    lines.push("END:VEVENT");
   }
-  lines.push(`SUMMARY:${esc(e.title)}`);
-  const desc = describe(e);
-  if (desc) lines.push(`DESCRIPTION:${esc(desc)}`);
-  if (e.location) lines.push(`LOCATION:${esc(e.location)}`);
-  lines.push("STATUS:CONFIRMED");
-  lines.push("END:VEVENT");
+  lines.push("END:VCALENDAR");
+  return { ics: lines.map(fold).join("\r\n") + "\r\n", count: sorted.length };
 }
 
-lines.push("END:VCALENDAR");
-
-const ics = lines.map(fold).join("\r\n") + "\r\n";
-writeFileSync(OUT, ics, "utf8");
-console.log(`Wrote ${OUT} — ${sorted.length} events, ${Buffer.byteLength(ics)} bytes`);
+for (const level of LEVELS) {
+  const filtered = level.key === "All"
+    ? EVENTS
+    : EVENTS.filter(e => {
+        const g = e.groups || [];
+        return g.includes("All") || g.includes(level.key);
+      });
+  const outPath = join(here, `${level.file}.ics`);
+  const { ics, count } = buildICS(filtered, `Alpha NYC Parents — ${level.label}`);
+  writeFileSync(outPath, ics, "utf8");
+  console.log(`Wrote ${outPath} — ${count} events, ${Buffer.byteLength(ics)} bytes`);
+}

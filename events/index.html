@@ -27,6 +27,10 @@
   .subscribe .sbtn:hover{background:rgba(255,255,255,.22)}
   .subscribe .sbtn.primary{background:#fff;color:var(--navy);border-color:#fff}
   .subnote{font-size:12px;color:#aac2dd;margin-top:9px;max-width:60ch}
+  .lvlrow{display:flex;align-items:center;gap:8px;margin-top:13px;flex-wrap:wrap}
+  .lvlrow label{font-size:12px;color:#aac2dd;font-weight:600;white-space:nowrap}
+  .lvlrow select{font-size:13px;font-weight:650;padding:7px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.12);color:#fff;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aac2dd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;padding-right:26px}
+  .lvlrow select option{background:#1a2a3a;color:#fff}
   main{padding:22px 0 60px}
   /* toolbar */
   .bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
@@ -78,9 +82,21 @@
       <div class="brandline"><a href="../" aria-label="Parent Hub home" style="display:inline-flex"><img src="../assets/alpha-white.svg" alt="Alpha School"></a></div>
       <h1 class="htitle">Events &amp; Key Dates</h1>
       <p class="tag">Browse what's coming up. Subscribe once to get every event in your own calendar — or tap any single event below to add it.</p>
+      <div class="lvlrow">
+        <label for="lvlpick">📅 Subscribe for:</label>
+        <select id="lvlpick">
+          <option value="alpha">All Levels</option>
+          <option value="alpha-wl">WonderLab (Pre-K / K)</option>
+          <option value="alpha-ll">Learning Lab</option>
+          <option value="alpha-l1">Level 1</option>
+          <option value="alpha-l2">Level 2</option>
+          <option value="alpha-ms">Middle School</option>
+          <option value="alpha-hs">High School</option>
+        </select>
+      </div>
       <div class="subscribe">
-        <a class="sbtn primary" href="https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Falphanycparents.xyz%2Fevents%2Falpha.ics" target="_blank" rel="noopener">➕ Add to Google Calendar</a>
-        <a class="sbtn" href="webcal://alphanycparents.xyz/events/alpha.ics">🍎 Apple / Outlook</a>
+        <a class="sbtn primary" id="gcal-btn" href="https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Falphanycparents.xyz%2Fevents%2Falpha.ics" target="_blank" rel="noopener">➕ Add to Google Calendar</a>
+        <a class="sbtn" id="apple-btn" href="webcal://alphanycparents.xyz/events/alpha.ics">🍎 Apple / Outlook</a>
         <button class="sbtn" id="copyics" type="button">🔗 Copy feed link</button>
       </div>
       <p class="subnote">Subscribing keeps your calendar updated automatically as new events are added. (Apple refreshes within minutes; Google refreshes subscribed feeds every few hours.)</p>
@@ -203,12 +219,23 @@
       : e.date.replace(/-/g,'')+'T'+e.start.replace(':','')+'00/'+(e.end||e.date).replace(/-/g,'')+'T'+((e.finish||e.start).replace(':',''))+'00';
     return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title)+'&dates='+dates+(e.location?'&location='+encodeURIComponent(e.location):'')+(e.notes?'&details='+encodeURIComponent(e.notes):'');
   }
+  // Level picker — swap feed URLs when selection changes
+  function icsFile(){return(document.getElementById('lvlpick')||{value:'alpha'}).value+'.ics';}
+  function updateSubLinks(){
+    var f=icsFile();
+    var gcal=document.getElementById('gcal-btn');
+    var apple=document.getElementById('apple-btn');
+    if(gcal) gcal.href='https://calendar.google.com/calendar/r?cid=webcal%3A%2F%2Falphanycparents.xyz%2Fevents%2F'+encodeURIComponent(f);
+    if(apple) apple.href='webcal://alphanycparents.xyz/events/'+f;
+  }
+  var lvlpick=document.getElementById('lvlpick');
+  if(lvlpick) lvlpick.addEventListener('change',updateSubLinks);
   // Subscribe: copy the raw ICS feed URL
   document.addEventListener('click',function(e){
     if(e.target&&e.target.id==='copyics'){
-      const url='https://alphanycparents.xyz/events/alpha.ics';
+      var url='https://alphanycparents.xyz/events/'+icsFile();
       navigator.clipboard.writeText(url).then(function(){
-        const b=e.target, t=b.textContent; b.textContent='✓ Copied!';
+        var b=e.target, t=b.textContent; b.textContent='✓ Copied!';
         setTimeout(function(){ b.textContent=t; },1800);
       }).catch(function(){ prompt('Copy this calendar feed link:',url); });
     }
